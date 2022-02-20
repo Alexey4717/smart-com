@@ -8,8 +8,8 @@ const AppLogo = styled('img')(() => ({
 
 const Logo: FC = () => (
   <AppLogo
-    alt="НО РАО"
-    src="/static/no_rao_logo.png"
+    alt="Smart Com"
+    src="/static/logo.png"
   />
 );
 

@@ -1,5 +1,6 @@
 import type { FC } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { RootState, useSelector } from 'store';
 import {
   AppBar as MuiAppBar,
   Box,
@@ -8,6 +9,7 @@ import {
   Toolbar as MuiToolbar,
   SvgIcon
 } from '@mui/material';
+import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -34,41 +36,55 @@ const TopBar: FC<TopBarProps> = ({
   onMobileNavOpen,
   onLogoutClick,
   ...rest
-}) => (
-  <AppBar {...rest}>
-    <Toolbar>
-      <Hidden lgUp>
-        <IconButton
-          color="inherit"
-          onClick={onMobileNavOpen}
+}) => {
+  const userSelector = ({ auth }: RootState) => auth.user;
+  const {
+    login
+  } = useSelector(userSelector);
+  const userName = login;
+
+  return (
+    <AppBar {...rest}>
+      <Toolbar>
+        <Hidden lgUp>
+          <IconButton
+            color="inherit"
+            onClick={onMobileNavOpen}
+          >
+            <SvgIcon>
+              <MenuIcon />
+            </SvgIcon>
+          </IconButton>
+        </Hidden>
+        <Hidden mdDown>
+          <RouterLink to="/">
+            <Logo />
+          </RouterLink>
+        </Hidden>
+        <AppTitle />
+        <Box
+          ml={2}
+          flexGrow={1}
+        />
+        <Typography
+          variant="h5"
+          color="textPromary"
         >
-          <SvgIcon>
-            <MenuIcon />
-          </SvgIcon>
-        </IconButton>
-      </Hidden>
-      <Hidden mdDown>
-        <RouterLink to="/">
-          <Logo />
-        </RouterLink>
-      </Hidden>
-      <AppTitle />
-      <Box
-        ml={2}
-        flexGrow={1}
-      />
-      <Box ml={2}>
-        <IconButton
-          color="inherit"
-          onClick={onLogoutClick}
-        >
-          <SvgIcon>
-            <LogoutIcon />
-          </SvgIcon>
-        </IconButton>
-      </Box>
-    </Toolbar>
-  </AppBar>
-);
+          {userName}
+        </Typography>
+        <Box ml={2}>
+          <IconButton
+            color="inherit"
+            onClick={onLogoutClick}
+          >
+            <SvgIcon>
+              <LogoutIcon />
+            </SvgIcon>
+          </IconButton>
+        </Box>
+      </Toolbar>
+    </AppBar>
+  );
+};
 
 export default TopBar;

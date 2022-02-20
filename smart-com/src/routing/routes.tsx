@@ -94,7 +94,7 @@ export const routes: RoutesType = [
     routes: [
       {
         path: '/',
-        component: () => <Redirect to={login} />
+        component: () => <Redirect to={home} />
       },
       {
         component: () => <Redirect to={pageNotFound} />

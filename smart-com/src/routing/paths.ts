@@ -8,7 +8,7 @@ const paths: Record<string, string> = {
 
   /* AUTH */
   home: `${root}`,
-  profile: `${root}/control/`,
+  profile: `${root}/profile/`,
   dialogs: `${root}/dialogs/`,
   users: `${root}/users/`,
   settings: `${root}/settings/`

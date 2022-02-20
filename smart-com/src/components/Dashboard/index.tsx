@@ -18,7 +18,6 @@ interface DashboardLayoutProps {
 const DashboardLayout = styled(Page)(() => ({
   display: 'flex',
   height: '100%',
-  // overflow: 'hidden',
   width: '100%',
 }));
 

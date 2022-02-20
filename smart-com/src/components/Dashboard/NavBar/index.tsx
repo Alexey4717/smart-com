@@ -1,38 +1,19 @@
 /* eslint-disable no-use-before-define */
-import {
-  useEffect,
-  useMemo,
-  FC,
-  ReactElement,
-} from 'react';
-import {
-  useLocation,
-  matchPath,
-} from 'react-router-dom';
-// import PerfectScrollbar from 'react-perfect-scrollbar';
-import {
-  Box,
-  Divider,
-  Drawer as MuiDrawer,
-  Hidden,
-  List,
-  ListSubheader,
-  Typography,
-  ListProps,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
-import { RootState, useSelector } from 'store';
+import { useEffect, useMemo, useState } from 'react';
+import type { FC, ReactElement } from 'react';
+import { useLocation } from 'react-router-dom';
+import { Box, List } from '@mui/material';
+import { styled, Theme, CSSObject } from '@mui/material/styles';
+import MuiDrawer from '@mui/material/Drawer';
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
+import CssBaseline from '@mui/material/CssBaseline';
 import NavItem from './NavItem';
 import sections from './sections';
 import type { Section, NavBarProps } from './types';
 
 function renderSections(navSections: Section[]): ReactElement[] {
   return navSections.map((section) => {
-    const {
-      title,
-      icon,
-      href,
-    } = section;
+    const { title, icon, href } = section;
     return (
       <NavItem
         href={href}
@@ -42,29 +23,86 @@ function renderSections(navSections: Section[]): ReactElement[] {
       />
     )
   })
+};
+
+const drawerWidth = 240;
+
+const openedMixin = (theme: Theme): CSSObject => ({
+  width: drawerWidth,
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+  overflowX: 'hidden',
+});
+
+const closedMixin = (theme: Theme): CSSObject => ({
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  overflowX: 'hidden',
+  width: `calc(${theme.spacing(7)} + 1px)`,
+  [theme.breakpoints.up('sm')]: {
+    width: `calc(${theme.spacing(9)} + 1px)`,
+  },
+});
+
+interface AppBarProps extends MuiAppBarProps {
+  open?: boolean;
 }
 
-const Drawer = styled(MuiDrawer)(({ theme }) => ({
-  width: 256,
-  '& .MuiDrawer-paper': {
-    width: 256,
-    background: theme.palette.primary.main,
-    color: theme.palette.text.lighter
-  }
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== 'open',
+})<AppBarProps>(({ theme, open }) => ({
+  zIndex: theme.zIndex.drawer + 1,
+  transition: theme.transitions.create(['width', 'margin'], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
 }));
 
-const userSelector = ({ auth }: RootState) => auth.user;
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+  ({ theme, open }) => ({
+    width: drawerWidth,
+    flexShrink: 0,
+    whiteSpace: 'nowrap',
+    boxSizing: 'border-box',
+    ...(open && {
+      ...openedMixin(theme),
+      '& .MuiDrawer-paper': openedMixin(theme),
+    }),
+    ...(!open && {
+      ...closedMixin(theme),
+      '& .MuiDrawer-paper': closedMixin(theme),
+    }),
+  }),
+);
 
 const NavBar: FC<NavBarProps> = ({ onMobileClose, openMobile }) => {
+  const [open, setOpen] = useState(false);
   const location = useLocation();
 
-  const {
-    login,
-    email,
-    id
-  } = useSelector(userSelector);
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
 
-  const userName = login;
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
+  const sectionsList = useMemo(
+    () => renderSections(sections),
+    [sections],
+  );
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
@@ -72,59 +110,20 @@ const NavBar: FC<NavBarProps> = ({ onMobileClose, openMobile }) => {
     }
   }, [location.pathname]);
 
-  const sectionsList = useMemo(
-    () => renderSections(sections),
-    [sections],
-  );
-
-  const content = (
-    <Box
-      height="100%"
-      display="flex"
-      flexDirection="column"
-    >
-      <Box
-        p={3}
-        textAlign="center"
-      >
-        <Typography
-          variant="h5"
-          color="textPrimary"
-          gutterBottom
-        >
-          {userName}
-        </Typography>
-        <Typography
-          variant="subtitle2"
-          color="textSecondary"
-          gutterBottom
-        >
-          {id}
-        </Typography>
-        <Typography
-          variant="subtitle2"
-          color="textSecondary"
-          gutterBottom
-        >
-          {email}
-        </Typography>
-      </Box>
-      <Divider />
-      <Box p={2}>
-        {sectionsList}
-      </Box>
+  return (
+    <Box sx={{ display: 'flex' }}
+      onMouseEnter={handleDrawerOpen}
+      onMouseLeave={handleDrawerClose}>
+      <CssBaseline />
+      <AppBar position="fixed" open={open}>
+      </AppBar>
+      <Drawer variant="permanent" open={open}>
+        <List sx={{ paddingTop: '100px' }}>
+          {sectionsList}
+        </List>
+      </Drawer>
     </Box>
   );
-
-  return (
-    <Drawer
-      anchor="left"
-      open
-      variant="persistent"
-    >
-      {content}
-    </Drawer>
-  );
-};
+}
 
 export default NavBar;

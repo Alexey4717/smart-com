@@ -4,7 +4,7 @@ import {
   useDispatch as useReduxDispatch,
   useSelector as useReduxSelector
 } from 'react-redux';
-import { authReducer } from './slices/Auth';
+import { authReducer } from './slices/auth';
 import { appReducer } from './slices/app';
 
 const devTools = process.env.NODE_ENV === 'development';

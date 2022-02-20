@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import type { FC, ReactNode, ElementType, ReactElement } from 'react';
-import { NavLink as RouterLink } from 'react-router-dom';
+import type { FC } from 'react';
+import { NavLink } from 'react-router-dom';
 import {
-  Button as MuiButton,
   ListItem
 } from '@mui/material';
 import { styled } from '@mui/system';
-import type { ButtonProps } from '@mui/material';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
 
 interface NavItemProps {
   className?: string;
@@ -15,30 +15,19 @@ interface NavItemProps {
   title: string;
 };
 
-interface MenuButtonStyledProps {
-  depth?: number
-};
-
-// type ButtonType = <C extends ElementType>(
-//   props: ButtonProps<C, { component?: C, depth?: number }>
-// ) => ReactElement;
-
-const MenuItemLeaf = styled(ListItem)(() => ({
+const MenuItems = styled(ListItem)(() => ({
   display: 'flex',
   paddingTop: 0,
   paddingBottom: 0,
-}));
-
-const IconWrapper = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: 22,
-  marginRight: theme.spacing(1),
-}));
-
-const Title = styled('span')(() => ({
-  marginRight: 'auto',
+  '& > a': {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    color: 'gray',
+    textDecoration: 'none',
+    width: '100%',
+    marginTop: '20px',
+  }
 }));
 
 const NavItem: FC<NavItemProps> = ({
@@ -49,7 +38,7 @@ const NavItem: FC<NavItemProps> = ({
 }) => {
 
   const activeLinkStyle = {
-    color: '#FFF',
+    color: 'yellow',
     '& $title': {
       fontWeight: 500,
     },
@@ -59,30 +48,31 @@ const NavItem: FC<NavItemProps> = ({
   };
 
   return (
-    <MenuItemLeaf
+    <MenuItems
       disableGutters
       key={title}
       {...rest}
     >
-      <RouterLink
-        //activeStyle={activeLinkStyle}
-        //component={RouterLink}
-        //exact
+      <NavLink
+        activeStyle={activeLinkStyle}
+        exact
         to={href}
       >
+        <ListItem button>
         {Icon && (
-          <IconWrapper>
+          <ListItemIcon>
             <Icon
-              sx={{ display: 'block' }}
-              size="20"
+              sx={{ display: 'block', fontSize: '2rem' }}
+              size="30"
             />
-          </IconWrapper>
-        )}
-        <Title>
-          {title}
-        </Title>
-      </RouterLink>
-    </MenuItemLeaf>
+          </ListItemIcon>
+          )}
+          <Typography sx={{ fontSize: '24px' }} >
+            <ListItemText primary={title} />
+          </Typography>
+        </ListItem>
+      </NavLink>
+    </MenuItems>
   );
 };
 

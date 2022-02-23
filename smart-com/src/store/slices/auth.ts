@@ -10,7 +10,7 @@ export interface AuthState {
   errors: string | string[];
   isAuthenticated: boolean;
   isFetching: boolean;
-  captchaUrl?: string | null;
+  captchaUrl?: any;
   user: AuthUser | null;
 };
 
@@ -50,7 +50,7 @@ export const getCapthaUrl = createAsyncThunk<CaptchaResponse>(
   `${sliceName}/getCapthaUrl`,
   async (): Promise<CaptchaResponse> => {
     const response = await securityAPI.getCaptchaUrl();
-    const captchaUrl = response.data.url;
+    const captchaUrl = response.url;
     return captchaUrl;
   });
 
@@ -87,7 +87,7 @@ const slice = createSlice({
         state.status = DataLoadingStates.LOADING;
       })
       .addCase(getCapthaUrl.fulfilled, (state, action) => {
-        state.captchaUrl = action.payload.data.url;
+        state.captchaUrl = action.payload;
         state.status = DataLoadingStates.IDLE;
       })
       .addCase(getCapthaUrl.rejected, (state, { error }) => {

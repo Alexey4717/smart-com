@@ -37,17 +37,18 @@ export const AuthProvider: FC = ({ children }) => {
 
   const login = async (
     email: string,
-    password: StringMappingType
+    password: StringMappingType,
+    rememberMe: boolean = false,
+    captcha: string | null = null
   ) => {
     try {
       const {
         resultCode,
         messages
-      } = await authAPI.login(email, password);
+      } = await authAPI.login(email, password, rememberMe, captcha);
 
       if (resultCode === 0) {
         dispatch(getAuthUserData());
-        history.push('/app/');
         enqueueSnackbar(
           'Авторизация прошла успешно',
           { variant: 'success' }
@@ -56,7 +57,7 @@ export const AuthProvider: FC = ({ children }) => {
         if (resultCode === 10) {
           dispatch(getCapthaUrl())
           enqueueSnackbar(
-            'Введите captcha',
+            'Введите корректный captcha',
             { variant: 'warning' }
           );
         } else {
@@ -66,9 +67,8 @@ export const AuthProvider: FC = ({ children }) => {
       }
 
     } catch (error) {
-      const { errors } = error ?? {};
       enqueueSnackbar(
-        `Возникла ошибка в процессе авторизации: ${errors}`,
+        `Возникла ошибка в процессе авторизации: ${error}`,
         { variant: 'error' }
       );
     }
@@ -90,6 +90,7 @@ export const AuthProvider: FC = ({ children }) => {
           'Сессия пользователя успешно завершена',
           { variant: 'success' }
         );
+        history.push('/login/');
       } else {
         const message = messages.length > 0 ? messages[0] : 'Неизвестная ошибка';
         throw new Error(message)

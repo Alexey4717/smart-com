@@ -38,12 +38,15 @@ const NavItem: FC<NavItemProps> = ({
 }) => {
 
   const activeLinkStyle = {
-    color: 'yellow',
+    color: 'white',
+    backgroundColor: 'gray',
+    borderRight: '5px solid black',
+    fontWeight: 900,
     '& $title': {
       fontWeight: 500,
     },
-    '& $icon': {
-      color: '#FFF',
+    '& > * > * > .MuiSvgIcon-root': {
+      color: 'black',
     },
   };
 

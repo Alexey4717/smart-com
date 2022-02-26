@@ -11,14 +11,14 @@ import {
   Box,
   Button,
   Divider,
-  Typography,
-  Checkbox
+  Typography
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import useAuth from 'hooks/useAuth';
 import useIsMountedRef from 'hooks/useIsMountedRef';
 import { captchaUrlSelector } from 'store/selectors/security'
 import TextField from 'components/TextField';
+import Checkbox from 'components/Checkbox';
 import {
   initialValues,
   validationSchema
@@ -62,13 +62,10 @@ const LoginForm: FC = () => {
     onSubmit
   });
 
-  const { 
-    setFieldValue, 
-    errors, 
-    isSubmitting, 
-    values, 
-    handleChange, 
-    handleBlur 
+  const {
+    setFieldValue,
+    errors,
+    isSubmitting
   } = formik;
 
   useEffect(() => {
@@ -110,6 +107,7 @@ const LoginForm: FC = () => {
               error={Boolean(touched && error)}
               helperText={touched && error}
               margin="normal"
+              withIcon
             />
           )}
         </Field>
@@ -120,17 +118,18 @@ const LoginForm: FC = () => {
             alignItems: 'center'
           }
         }}>
-          <label>
-            <Checkbox
-              name="rememberMe"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.rememberMe}
-            />
-            <Typography sx={{ ml: '24px', cursor: 'pointer' }}>
-              Запомнить меня
-            </Typography>
-          </label>
+          <Field name="lookingForAJob">
+            {({ field, meta: { error, touched } }) => (
+              <Checkbox
+                {...field}
+                label={"Запомнить меня"}
+                name="rememberMe"
+                error={Boolean(touched && error)}
+                helperText={touched && error}
+                margin="normal"
+              />
+            )}
+          </Field>
         </Box>
         {
           captchaUrl

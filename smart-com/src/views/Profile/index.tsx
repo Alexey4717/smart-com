@@ -1,22 +1,13 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import View from 'components/View';
 import {
   Alert,
   Box,
-  Typography,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Collapse
+  Typography
 } from '@mui/material';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import ViewListIcon from '@mui/icons-material/ViewList';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import FactCheckIcon from '@mui/icons-material/FactCheck';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import Button from '@mui/material/Button';
 import { useTheme } from '@mui/system';
 import {
@@ -24,23 +15,20 @@ import {
   statusSelector,
   profileSelector
 } from 'store/selectors/profile';
-import { authUserIdSelector } from 'store/selectors/auth';
-import { getProfileById } from 'store/slices/profile';
 import { DataLoadingStates } from 'types/utility';
-import Service from './Service';
 import ProfileData from './ProfileData';
 import ProfileEditor from './ProfileEditor';
 import Loader from 'components/Loader';
+import { getProfileById } from 'store/slices/profile';
+import { authUserIdSelector } from 'store/selectors/auth';
 
 const { LOADING, ERROR } = DataLoadingStates;
 
 const Profile = () => {
   const { palette } = useTheme();
-  const dispatch = useDispatch();
 
   const [isEditMode, setIsEditMode] = useState(false);
 
-  const authUserId = useSelector(authUserIdSelector);
   const profile = useSelector(profileSelector);
   const errors = useSelector(errorsSelector);
   const loadingStatus = useSelector(statusSelector);
@@ -50,22 +38,24 @@ const Profile = () => {
     setIsEditMode(editMode => !editMode)
   }, [setIsEditMode]);
 
+  const dispatch = useDispatch();
+  const authUserId = useSelector(authUserIdSelector);
 
   useEffect(() => {
-    dispatch(getProfileById(authUserId))
-  }, [dispatch]);
+    dispatch(getProfileById(authUserId));
+  }, [dispatch, authUserId]);
 
-  const subTitle = (
+
+  const subTitle = useMemo(() => (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       <Box sx={{ marginRight: 2 }}>
         <Typography color="textSecondary">
           Вашего аккаунта
         </Typography>
       </Box>
-      {isEditMode}
       <Button variant="text" onClick={toggleEditMode}>
         {isEditMode
-          ? <FactCheckIcon
+          ? <HighlightOffIcon
             sx={{ display: 'block' }}
             color={palette.text.secondary}
           />
@@ -74,12 +64,11 @@ const Profile = () => {
             color={palette.text.secondary}
           />}
         <Typography color="textSecondary">
-          {isEditMode ? 'Завершить редактирование' : 'Редактировать'}
+          {isEditMode ? 'Отменить редактирование' : 'Редактировать'}
         </Typography>
       </Button>
-      <AdminPanelSettingsIcon />
     </Box>
-  );
+  ), [isEditMode]);
 
   return (
     <View
@@ -89,7 +78,9 @@ const Profile = () => {
     >
       {isLoading ? <Loader /> : profile && (
         <>
-          {isEditMode ? <ProfileEditor /> : <ProfileData />}
+          {isEditMode 
+            ? <ProfileEditor setIsEditMode={setIsEditMode} /> 
+            : <ProfileData />}
         </>
       )}
       {(loadingStatus === ERROR) && (

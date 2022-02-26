@@ -1,14 +1,16 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import type { AuthUser } from 'types/user';
 import { DataLoadingStates } from 'types/utility';
 import type { ContactsType, PhotosType, ProfileType } from 'types/profile';
 import { profileAPI } from '../api/profile';
-import type { GetCaptchaUrlResponseType } from '../api/security';
 
-interface Profile extends ProfileType {
+type ProfileResponse = ProfileType & {
+  userStatus: string;
+}
+
+interface Profile extends ProfileResponse {
   contacts: ContactsType;
   photos: PhotosType;
-}
+};
 
 export interface ProfileState {
   status: DataLoadingStates;
@@ -40,33 +42,27 @@ const initialState: ProfileState = {
       small: null,
       large: null
     },
-    aboutMe: null
+    aboutMe: null,
+    userStatus: null
   }
-};
-
-interface ProfileResponse {
-  data: ProfileType;
-  resultCode?: number | string;
 };
 
 export const getProfileById = createAsyncThunk<ProfileResponse, number>(
   `${sliceName}/getProfileById`,
   async (id): Promise<ProfileResponse> => {
     const response = await profileAPI.getProfile(id);
-    console.log('responseProfile', response);
-    return response;
+    const { data: userStatus } = await profileAPI.getStatus(id);
+    response.data.userStatus = userStatus;
+    return response.data;
   });
 
 const slice = createSlice({
   name: sliceName,
   initialState,
   reducers: {
-    // logout(state: AuthState) {
-    //   state.isAuthenticated = false;
-    //   state.user.id = null;
-    //   state.user.login = null;
-    //   state.user.email = null;
-    // }
+    setStatus(state: ProfileState, action) {
+      state.profile.userStatus = action.payload;
+    }
   },
   extraReducers: builder => {
     builder
@@ -94,8 +90,9 @@ const slice = createSlice({
             small,
             large
           },
-          aboutMe
-        } = action.payload.data;
+          aboutMe,
+          userStatus
+        } = action.payload;
         state.profile.userId = userId;
         state.profile.lookingForAJob = lookingForAJob;
         state.profile.lookingForAJobDescription = lookingForAJobDescription;
@@ -111,6 +108,7 @@ const slice = createSlice({
         state.profile.photos.small = small;
         state.profile.photos.large = large;
         state.profile.aboutMe = aboutMe;
+        state.profile.userStatus = userStatus;
         state.status = DataLoadingStates.IDLE;
       })
       .addCase(getProfileById.rejected, (state, { error }) => {
@@ -121,7 +119,7 @@ const slice = createSlice({
 });
 
 export const {
-  //logout
+  setStatus
 } = slice.actions;
 
 export const { reducer: profileReducer } = slice;

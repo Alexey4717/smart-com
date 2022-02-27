@@ -24,14 +24,16 @@ const DashboardLayout = styled(Page)(() => ({
 const Wrapper = styled(Page)(() => ({
   display: 'flex',
   flex: '1 1 auto',
-  overflow: 'hidden',
   paddingTop: 64,
 }));
 
-const ContentContainer = styled(Page)(() => ({
+const SidePanel = styled(Page)(() => ({
+  flexBasis: '250px'
+}));
+
+const CentralPanel = styled(Page)(() => ({
   display: 'flex',
-  flex: '1 1 auto',
-  overflow: 'hidden',
+  flex: '1 1 calc(100% - 500px)',
 }));
 
 const Content = styled(Page)(() => ({
@@ -74,16 +76,19 @@ const Dashboard: FC<DashboardLayoutProps> = ({ children }) => {
         onMobileNavOpen={handleMobileOpen}
         onLogoutClick={handleLogout}
       />
-      <NavBar
-        onMobileClose={handleMobileClose}
-        openMobile={isMobileNavOpen}
-      />
       <Wrapper>
-        <ContentContainer>
+        <SidePanel>
+          <NavBar
+            onMobileClose={handleMobileClose}
+            openMobile={isMobileNavOpen}
+          />
+        </SidePanel>
+        <CentralPanel>
           <Content>
             {children}
           </Content>
-        </ContentContainer>
+        </CentralPanel>
+        <SidePanel>Правая панель</SidePanel>
       </Wrapper>
     </DashboardLayout>
   );

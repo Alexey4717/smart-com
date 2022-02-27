@@ -38,13 +38,14 @@ const Login = () => (
               gutterBottom
               variant="h2"
             >
-              Вход в личный кабинет
+              Вход в "Smart Com"
             </Typography>
             <Typography
               variant="body2"
+              component="span"
               color="textSecondary"
             >
-              Введите свои данные для входа в систему
+              Введите свои данные для входа в социальную сеть
             </Typography>
           </Box>
           <LoginForm />

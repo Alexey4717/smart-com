@@ -38,13 +38,13 @@ const NavItem: FC<NavItemProps> = ({
 }) => {
 
   const activeLinkStyle = {
-    color: 'yellow',
+    color: 'white',
+    backgroundColor: 'gray',
+    borderRight: '5px solid black',
+    fontWeight: 900,
     '& $title': {
       fontWeight: 500,
-    },
-    '& $icon': {
-      color: '#FFF',
-    },
+    }
   };
 
   return (
@@ -67,7 +67,7 @@ const NavItem: FC<NavItemProps> = ({
             />
           </ListItemIcon>
           )}
-          <Typography sx={{ fontSize: '24px' }} >
+          <Typography sx={{ fontSize: '24px' }} component="div" >
             <ListItemText primary={title} />
           </Typography>
         </ListItem>

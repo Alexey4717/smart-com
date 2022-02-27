@@ -73,6 +73,22 @@ const theme = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: {
+        '*': {
+          padding: 0,
+          margin: 0,
+          boxSizing: 'border-box',
+          scrollbarColor: `${primary} ${textLight}`,
+          scrollbarWidth: 'thin',
+          '&::-webkit-scrollbar': {
+            width: '15px',
+            height: '15px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: primary,
+            borderRadius: '9em',
+            border: `5px solid ${textLight}`
+          },
+        },
         body: {
           height: '100vh',
           '& > #root': {
@@ -80,6 +96,15 @@ const theme = createTheme({
           }
         },
       },
+    },
+  },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
     },
   },
 });

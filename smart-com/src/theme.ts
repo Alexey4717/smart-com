@@ -74,6 +74,9 @@ const theme = createTheme({
     MuiCssBaseline: {
       styleOverrides: {
         '*': {
+          padding: 0,
+          margin: 0,
+          boxSizing: 'border-box',
           scrollbarColor: `${primary} ${textLight}`,
           scrollbarWidth: 'thin',
           '&::-webkit-scrollbar': {

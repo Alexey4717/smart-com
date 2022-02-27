@@ -7,6 +7,7 @@ import {
 import { authReducer } from './slices/auth';
 import { appReducer } from './slices/app';
 import { profileReducer } from './slices/profile';
+import { usersReducer } from './slices/users';
 
 const devTools = process.env.NODE_ENV === 'development';
 
@@ -14,7 +15,8 @@ export const store = configureStore({
   reducer: {
     auth: authReducer,
     app: appReducer,
-    profile: profileReducer
+    profile: profileReducer,
+    users: usersReducer
   },
   devTools
 });

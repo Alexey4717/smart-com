@@ -1,6 +1,7 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { getUserByIdSelector } from 'store/selectors/users';
+import { followUser, unfollowUser } from 'store/slices/users';
 import Avatar from '@mui/material/Avatar';
 
 interface OwnProps {
@@ -8,6 +9,7 @@ interface OwnProps {
 };
 
 const User = ({ id }: OwnProps) => {
+  const dispatch = useDispatch();
   const {
     name,
     status,
@@ -15,7 +17,15 @@ const User = ({ id }: OwnProps) => {
     photos: {
       large: userPhoto
     }
-  } = useSelector(getUserByIdSelector(id))
+  } = useSelector(getUserByIdSelector(id));
+
+  const handleFollowUser = useCallback(() => {
+    dispatch(followUser({ userId: id }))
+  }, [dispatch]);
+
+  const handleUnfollowUser = useCallback(() => {
+    dispatch(unfollowUser({ userId: id }))
+  }, [dispatch]);
 
   return (
     <div>
@@ -27,6 +37,9 @@ const User = ({ id }: OwnProps) => {
       <div>name: {name}</div>
       <div>status: {status}</div>
       <div>{followed ? 'В друзьях' : 'Не в друзьях'}</div>
+      <button onClick={followed ? handleUnfollowUser : handleFollowUser}>
+        {followed ? 'Отписатсья': 'Подписаться'}
+      </button>
     </div>
   );
 };

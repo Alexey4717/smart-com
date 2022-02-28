@@ -1,8 +1,11 @@
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useSnackbar } from 'notistack';
+import Avatar from '@mui/material/Avatar';
 import { getUserByIdSelector } from 'store/selectors/users';
 import { followUser, unfollowUser } from 'store/slices/users';
-import Avatar from '@mui/material/Avatar';
+import { usersAPI } from 'store/api/users';
+import type { APIResponseType } from 'store/api';
 
 interface OwnProps {
   id: string
@@ -10,6 +13,7 @@ interface OwnProps {
 
 const User = ({ id }: OwnProps) => {
   const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const {
     name,
     status,
@@ -19,13 +23,68 @@ const User = ({ id }: OwnProps) => {
     }
   } = useSelector(getUserByIdSelector(id));
 
-  const handleFollowUser = useCallback(() => {
-    dispatch(followUser({ userId: id }))
+  type Response = {
+    resultCode: number;
+    messages: string[];
+  }
+
+  const handleFollowUser = useCallback(async () => {
+    const userId = Number(id)
+    try {
+      const response = await usersAPI.follow(userId);
+
+      console.log('response', response);
+
+      if (response.resultCode === 0) {
+        dispatch(followUser(id));
+        enqueueSnackbar(
+          `Вы успешно подписались на пользователя ${name}`,
+          { variant: 'success' }
+        );
+      } else {
+        if (response.messages.length) {
+          throw new Error(response.messages[0]);
+        } else {
+          throw new Error()
+        }
+      }
+    } catch (error) {
+      enqueueSnackbar(
+        `Возникла ошибка при попытке подписаться на пользователя ${name}: ${error}`,
+        { variant: 'error' }
+      );
+    }
   }, [dispatch]);
 
   const handleUnfollowUser = useCallback(() => {
-    dispatch(unfollowUser({ userId: id }))
-  }, [dispatch]);
+    try {
+      const {
+        resultCode,
+        messages
+      }: any = usersAPI.follow(id);
+
+      console.log('resultCode', resultCode);
+
+      if (resultCode === 0) {
+        dispatch(unfollowUser(id))
+        enqueueSnackbar(
+          `Вы успешно отписались от пользователя ${name}`,
+          { variant: 'success' }
+        );
+      } else {
+        if (messages.length) {
+          throw new Error(messages[0]);
+        } else {
+          throw new Error()
+        }
+      }
+    } catch (error) {
+      enqueueSnackbar(
+        `Возникла ошибка при попытке отписаться от пользователя ${name}: ${error}`,
+        { variant: 'error' }
+      );
+    }
+  }, []);
 
   return (
     <div>

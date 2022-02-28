@@ -9,11 +9,12 @@ import { styled } from '@mui/material/styles';
 import useAuth from 'hooks/useAuth';
 import NavBar from './NavBar';
 import TopBar from './TopBar';
+import RightBar from './RightBar';
 import Page from '../Page';
 
 interface DashboardLayoutProps {
   children?: ReactNode;
-}
+};
 
 const DashboardLayout = styled(Page)(() => ({
   display: 'flex',
@@ -88,7 +89,9 @@ const Dashboard: FC<DashboardLayoutProps> = ({ children }) => {
             {children}
           </Content>
         </CentralPanel>
-        <SidePanel>Правая панель</SidePanel>
+        <SidePanel>
+          <RightBar />
+        </SidePanel>
       </Wrapper>
     </DashboardLayout>
   );

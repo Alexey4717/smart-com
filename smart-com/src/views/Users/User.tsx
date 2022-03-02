@@ -1,11 +1,12 @@
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSnackbar } from 'notistack';
-import Avatar from '@mui/material/Avatar';
-import ImageListItem from '@mui/material/ImageListItem';
-import ImageListItemBar from '@mui/material/ImageListItemBar';
-import ListSubheader from '@mui/material/ListSubheader';
-import IconButton from '@mui/material/IconButton';
+import {  
+  Typography, 
+  Button, 
+  ImageListItem,
+  ImageListItemBar
+} from '@mui/material';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import { getUserByIdSelector } from 'store/selectors/users';
@@ -29,13 +30,14 @@ const User = ({ id }: OwnProps) => {
     }
   } = useSelector(getUserByIdSelector(id));
 
+  const userId = Number(id);
+
   type Response = {
     resultCode: number;
     messages: string[];
-  }
+  };
 
   const handleFollowUser = useCallback(async () => {
-    const userId = Number(id)
     try {
       const response = await usersAPI.follow(userId);
 
@@ -60,26 +62,24 @@ const User = ({ id }: OwnProps) => {
         { variant: 'error' }
       );
     }
-  }, [dispatch]);
+  }, [userId]);
 
-  const handleUnfollowUser = useCallback(() => {
+  const handleUnfollowUser = useCallback(async () => {
+
     try {
-      const {
-        resultCode,
-        messages
-      }: any = usersAPI.follow(id);
+      const response = await usersAPI.unfollow(userId);
 
-      console.log('resultCode', resultCode);
+      console.log('resultCode', response.resultCode);
 
-      if (resultCode === 0) {
+      if (response.resultCode === 0) {
         dispatch(unfollowUser(id))
         enqueueSnackbar(
           `Вы успешно отписались от пользователя ${name}`,
           { variant: 'success' }
         );
       } else {
-        if (messages.length) {
-          throw new Error(messages[0]);
+        if (response.messages.length) {
+          throw new Error(response.messages[0]);
         } else {
           throw new Error()
         }
@@ -90,7 +90,7 @@ const User = ({ id }: OwnProps) => {
         { variant: 'error' }
       );
     }
-  }, []);
+  }, [userId]);
 
   return (
     <ImageListItem>
@@ -99,20 +99,28 @@ const User = ({ id }: OwnProps) => {
         srcSet={`${userPhoto ? userPhoto : '/static/user-photo.png'}?w=248&fit=crop&auto=format&dpr=2 2x`}
         alt={`photo of ${name}`}
         loading="lazy"
-        //style={{ width: '600px', height: '600px' }}
+      //style={{ width: '600px', height: '600px' }}
       />
       <ImageListItemBar
+        sx={{ pr: 2 }}
         title={name}
         subtitle={status ? status : 'Статус отсутствует'}
         actionIcon={
-          <IconButton
-            sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+          <Button
+            sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              backgroundColor: 'rgba(66, 82, 110, 0.86)' 
+            }}
+            variant="contained"
             aria-label={`info about ${name}`}
             onClick={followed ? handleUnfollowUser : handleFollowUser}
           >
-            {followed ? <PersonRemoveIcon /> : <PersonAddIcon /> }
-            {followed ? 'Отписатсья' : 'Подписаться'}
-          </IconButton>
+            <Typography sx={{ mr: 1, fontSize: 14 }}>
+              {followed ? 'Отписаться' : 'Подписаться'}
+            </Typography>
+            {followed ? <PersonRemoveIcon /> : <PersonAddIcon />}
+          </Button>
         }
       />
     </ImageListItem>

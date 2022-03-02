@@ -85,11 +85,12 @@ const slice = createSlice({
     },
     followUser(state: UsersState, action) {
       const { id }: any = action.payload;
-      console.log('action.payload', action.payload)
+      console.log('action.payload - follow', action.payload)
       state.users.byId[id].followed = true;
     },
     unfollowUser(state: UsersState, action) {
       const { id }: any = action.payload;
+      console.log('action.payload - unfollow', action.payload)
       state.users.byId[id].followed = false;
     }
   },
@@ -114,30 +115,6 @@ const slice = createSlice({
         state.errors = error.message;
         state.status = DataLoadingStates.ERROR;
       })
-      // .addCase(followUser.pending, (state) => {
-      //   state.status = DataLoadingStates.LOADING;
-      // })
-      // .addCase(followUser.fulfilled, (state, action) => {
-      //   const { id }: any = action.payload.data;
-      //   state.users.byId[id].followed = true;
-      //   state.status = DataLoadingStates.IDLE;
-      // })
-      // .addCase(followUser.rejected, (state, { error }) => {
-      //   state.errors = error.message;
-      //   state.status = DataLoadingStates.ERROR;
-      // })
-      // .addCase(unfollowUser.pending, (state) => {
-      //   state.status = DataLoadingStates.LOADING;
-      // })
-      // .addCase(unfollowUser.fulfilled, (state, action) => {
-      //   const { id }: any = action.payload.data;
-      //   state.users.byId[id].followed = false;
-      //   state.status = DataLoadingStates.IDLE;
-      // })
-      // .addCase(unfollowUser.rejected, (state, { error }) => {
-      //   state.errors = error.message;
-      //   state.status = DataLoadingStates.ERROR;
-      // })
   }
 });
 

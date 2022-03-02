@@ -26,6 +26,7 @@ const Box = styled('div')(({ theme }) => ({
   padding: '5px',
   backgroundColor: 'white',
   border: `1px solid ${theme.palette.primary.main}`,
+  borderRadius: '0 0 10px 10px'
 }));
 
 
@@ -68,7 +69,11 @@ const RightBar = () => {
       <Header>
         Подписчики ({totalFollowersCount}):
       </Header>
-      <Box>
+      <Box sx={{
+        '&::-webkit-scrollbar-thumb': {
+          border: `5px solid white`
+        },
+      }}>
         {followersData.map(({ id, name, photos: { small } }) => (
           <Follower name={name} photo={small} key={id} />
         ))}

@@ -15,7 +15,7 @@ const UsersData = () => {
 
   return (
     <ImageList 
-      sx={{ width: '100%', height: '100%' }}
+      sx={{ width: '100%', height: '100%', py: 3 }}
       cols={4} 
       gap={20}
     >

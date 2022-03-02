@@ -1,14 +1,10 @@
 import React, { useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { usersIdsSelector } from 'store/selectors/users';
+import ImageList from '@mui/material/ImageList';
 import User from './User';
 
-type gg = {
-  id: string
-}
-
 const UsersData = () => {
-  //const dispatch = useDispatch();
   const usersIds: string[] = useSelector(usersIdsSelector);
 
   const usersToRender = useMemo(() => (
@@ -18,7 +14,13 @@ const UsersData = () => {
   ), [usersIds.length]);
 
   return (
-    <div>{usersToRender}</div>
+    <ImageList 
+      sx={{ width: '100%', height: '100%' }}
+      cols={4} 
+      gap={20}
+    >
+      {usersToRender}
+    </ImageList>
   )
 };
 

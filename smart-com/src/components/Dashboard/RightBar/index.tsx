@@ -1,44 +1,79 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Box, Typography } from '@mui/material';
-import { usersIdsSelector } from 'store/selectors/users';
-import { getUsersData } from 'store/slices/users';
+import React, { useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
+import { usersAPI } from 'store/api/users';
+import type { GetItemsType } from 'store/api';
+import type { UserType } from 'types/user';
 import Follower from './Follower';
 
+const Wrapper = styled('div')({
+  margin: '10px 10px 10px 0',
+});
+
+const Header = styled('span')(({ theme }) => ({
+  display: 'block',
+  color: 'white',
+  backgroundColor: theme.palette.primary.main,
+  borderRadius: ' 10px 10px 0 0',
+  textAlign: 'center'
+}));
+
+const Box = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+  height: '500px',
+  overflow: 'scroll',
+  padding: '5px',
+  backgroundColor: 'white',
+  border: `1px solid ${theme.palette.primary.main}`,
+}));
+
+
+
+
 const RightBar = () => {
-  const dispatch = useDispatch();
+  const [followersData, setFollowersData] = useState<UserType[]>([]);
+  const [totalFollowersCount, setTotalFollowersCount] = useState<number>();
 
   useEffect(() => {
-    dispatch(getUsersData({
-      currentPage: 1,
-      pageSize: 100,
-      term: '',
-      friend: true
-    }));
+    const getFollowersData = async () => {
+      try {
+        const {
+          items,
+          totalCount,
+          error
+        }: GetItemsType = await usersAPI.getUsers(1, 100, '', true);
 
-    //поменять на запрос и присваивание данных без диспатча в стор (т.к. будут перезатираться user`ы)
+        if (items.length) {
+          setFollowersData(items);
+        }
+
+        if (totalCount) {
+          setTotalFollowersCount(totalCount);
+        }
+
+        if (error) {
+          throw new Error(error);
+        }
+      } catch (error) {
+        console.warn(error);
+      };
+    }
+
+    getFollowersData();
   }, []);
 
-  const userFolowersIds = useSelector(usersIdsSelector);
-  const totalFollowersCount = userFolowersIds.length;
-
   return (
-    <>
-      <Typography component="span">
+    <Wrapper>
+      <Header>
         Подписчики ({totalFollowersCount}):
-      </Typography>
-      <Box sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        width: '100%',
-        height: '500px',
-        overflow: 'scroll'
-      }}>
-        {userFolowersIds.map(id => (
-          <Follower id={id} key={id} />
+      </Header>
+      <Box>
+        {followersData.map(({ id, name, photos: { small } }) => (
+          <Follower name={name} photo={small} key={id} />
         ))}
       </Box>
-    </>
+    </Wrapper>
   )
 };
 

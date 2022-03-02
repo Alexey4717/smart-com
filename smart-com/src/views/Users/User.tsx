@@ -2,6 +2,12 @@ import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import Avatar from '@mui/material/Avatar';
+import ImageListItem from '@mui/material/ImageListItem';
+import ImageListItemBar from '@mui/material/ImageListItemBar';
+import ListSubheader from '@mui/material/ListSubheader';
+import IconButton from '@mui/material/IconButton';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import { getUserByIdSelector } from 'store/selectors/users';
 import { followUser, unfollowUser } from 'store/slices/users';
 import { usersAPI } from 'store/api/users';
@@ -87,19 +93,29 @@ const User = ({ id }: OwnProps) => {
   }, []);
 
   return (
-    <div>
-      <Avatar
-        sx={{ width: 200, height: 200 }}
-        src={userPhoto ? userPhoto : "/broken-image.jpg"}
+    <ImageListItem>
+      <img
+        src={`${userPhoto ? userPhoto : '/static/user-photo.png'}?w=248&fit=crop&auto=format`}
+        srcSet={`${userPhoto ? userPhoto : '/static/user-photo.png'}?w=248&fit=crop&auto=format&dpr=2 2x`}
         alt={`photo of ${name}`}
+        loading="lazy"
+        //style={{ width: '600px', height: '600px' }}
       />
-      <div>name: {name}</div>
-      <div>status: {status}</div>
-      <div>{followed ? 'В друзьях' : 'Не в друзьях'}</div>
-      <button onClick={followed ? handleUnfollowUser : handleFollowUser}>
-        {followed ? 'Отписатсья': 'Подписаться'}
-      </button>
-    </div>
+      <ImageListItemBar
+        title={name}
+        subtitle={status ? status : 'Статус отсутствует'}
+        actionIcon={
+          <IconButton
+            sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+            aria-label={`info about ${name}`}
+            onClick={followed ? handleUnfollowUser : handleFollowUser}
+          >
+            {followed ? <PersonRemoveIcon /> : <PersonAddIcon /> }
+            {followed ? 'Отписатсья' : 'Подписаться'}
+          </IconButton>
+        }
+      />
+    </ImageListItem>
   );
 };
 

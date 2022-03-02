@@ -1,23 +1,21 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import Avatar from '@mui/material/Avatar';
-import { getUserByIdSelector } from 'store/selectors/users';
+import { Avatar, Box, Button } from '@mui/material';
 
-const Follower = ({ id }) => {
-
-  const {
-    name,
-    photos: {
-      small: userPhoto
-    }
-  } = useSelector(getUserByIdSelector(id));
+const Follower = ({ name, photo }) => {
 
   return (
-    <>
-      <Avatar alt={`photo of ${name}`} src={userPhoto} />
-      <div>{name}</div>
-      <div>Написать сообщение</div>
-    </>
+    <Box sx={{ display: 'flex', border: '1px solid black', m: 1 }}>
+      <Avatar alt={`photo of ${name}`} src={photo} />
+      <div>
+        <div>{name}</div>
+        <Button 
+          sx={{ fontSize: '10px' }}
+          variant="outlined"
+        >
+          Написать сообщение
+        </Button>
+      </div>
+    </Box>
   );
 };
 

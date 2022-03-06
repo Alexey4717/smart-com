@@ -1,13 +1,26 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useSnackbar } from 'notistack';
+import {  
+  Typography, 
+  Button, 
+  ImageListItem,
+  ImageListItemBar
+} from '@mui/material';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import { getUserByIdSelector } from 'store/selectors/users';
-import Avatar from '@mui/material/Avatar';
+import { followUser, unfollowUser } from 'store/slices/users';
+import { usersAPI } from 'store/api/users';
+import type { APIResponseType } from 'store/api';
 
 interface OwnProps {
   id: string
 };
 
 const User = ({ id }: OwnProps) => {
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const {
     name,
     status,
@@ -15,19 +28,104 @@ const User = ({ id }: OwnProps) => {
     photos: {
       large: userPhoto
     }
-  } = useSelector(getUserByIdSelector(id))
+  } = useSelector(getUserByIdSelector(id));
+
+  const userId = Number(id);
+
+  type Response = {
+    resultCode: number;
+    messages: string[];
+  };
+
+  const handleFollowUser = useCallback(async () => {
+    try {
+      const {
+        messages,
+        resultCode,
+      } = await usersAPI.follow(userId);
+
+      if (resultCode === 0) {
+        dispatch(followUser(id));
+        enqueueSnackbar(
+          `Вы успешно подписались на пользователя ${name}`,
+          { variant: 'success' }
+        );
+      } else {
+        if (messages.length) {
+          throw new Error(messages[0]);
+        } else {
+          throw new Error()
+        }
+      }
+    } catch (error) {
+      enqueueSnackbar(
+        `Возникла ошибка при попытке подписаться на пользователя ${name}: ${error}`,
+        { variant: 'error' }
+      );
+    }
+  }, [userId]);
+
+  const handleUnfollowUser = useCallback(async () => {
+
+    try {
+      const {
+        messages,
+        resultCode,
+      } = await usersAPI.unfollow(userId);
+
+      if (resultCode === 0) {
+        dispatch(unfollowUser(id))
+        enqueueSnackbar(
+          `Вы успешно отписались от пользователя ${name}`,
+          { variant: 'success' }
+        );
+      } else {
+        if (messages.length) {
+          throw new Error(messages[0]);
+        } else {
+          throw new Error()
+        }
+      }
+    } catch (error) {
+      enqueueSnackbar(
+        `Возникла ошибка при попытке отписаться от пользователя ${name}: ${error}`,
+        { variant: 'error' }
+      );
+    }
+  }, [userId]);
 
   return (
-    <div>
-      <Avatar
-        sx={{ width: 200, height: 200 }}
-        src={userPhoto ? userPhoto : "/broken-image.jpg"}
+    <ImageListItem>
+      <img
+        src={`${userPhoto ? userPhoto : '/static/user-photo.png'}?w=248&fit=crop&auto=format`}
+        srcSet={`${userPhoto ? userPhoto : '/static/user-photo.png'}?w=248&fit=crop&auto=format&dpr=2 2x`}
         alt={`photo of ${name}`}
+        loading="lazy"
+      //style={{ width: '600px', height: '600px' }}
       />
-      <div>name: {name}</div>
-      <div>status: {status}</div>
-      <div>{followed ? 'В друзьях' : 'Не в друзьях'}</div>
-    </div>
+      <ImageListItemBar
+        sx={{ pr: 2 }}
+        title={name}
+        subtitle={status ? status : 'Статус отсутствует'}
+        actionIcon={
+          <Button
+            sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              backgroundColor: 'rgba(66, 82, 110, 0.86)' 
+            }}
+            variant="contained"
+            aria-label={`info about ${name}`}
+            onClick={followed ? handleUnfollowUser : handleFollowUser}
+          >
+            <Typography sx={{ mr: 1, fontSize: 14 }}>
+              {followed ? 'Отписаться' : 'Подписаться'}
+            </Typography>
+            {followed ? <PersonRemoveIcon /> : <PersonAddIcon />}
+          </Button>
+        }
+      />
+    </ImageListItem>
   );
 };
 

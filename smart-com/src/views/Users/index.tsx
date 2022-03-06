@@ -40,17 +40,27 @@ const Users = () => {
   const dispatch = useDispatch();
   const authUserId = useSelector(authUserIdSelector);
 
+  const [term, setTerm] = useState<string>('');
+
   useEffect(() => {
-    dispatch(getUsersData(1));
-  }, [dispatch]);
+    dispatch(getUsersData({currentPage: 1, pageSize, term, friend: null}));
+  }, [dispatch, pageSize, term]);
 
   const handleChangeCurrentPage = useCallback((
     event: React.ChangeEvent<unknown>,
     value: number
   ) => {
     dispatch(setCurrentPage(value));
-    dispatch(getUsersData(value))
-  }, [dispatch]);
+    dispatch(getUsersData({ currentPage: value, pageSize, term, friend: null }));
+  }, [dispatch, pageSize, term]);
+
+  const handleSearch = useCallback(
+    (term: string) => {
+      setTerm(term);
+      dispatch(getUsersData({ currentPage: 1, pageSize, term, friend: null }));
+    },
+    [setTerm, pageSize, term]
+  );
 
   const subTitle = useMemo(() => (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -68,9 +78,9 @@ const Users = () => {
       pageSubTitle={subTitle}
       isLoading={isLoading}
       search={{
-        query: '',
+        query: term,
         placeholder: 'Поиск пользователей',
-        onSubmit: () => console.log('submit')
+        onSubmit: handleSearch
       }}
     >
       <Pagination

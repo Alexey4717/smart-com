@@ -28,6 +28,7 @@ import type { APIResponseType } from 'store/api';
 import { setStatus, getProfileById } from 'store/slices/profile';
 import Service from './Service';
 import { flexbox } from '@mui/system';
+import Followers from './Followers';
 
 const ProflieAvatar = styled(Avatar)(({ theme }) => ({
   width: 300,
@@ -305,6 +306,7 @@ const ProfileData = () => {
           </Box>
         </Box>
       </Box>
+      <Followers />
     </Box>
   )
 };

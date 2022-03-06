@@ -7,7 +7,7 @@ import { useHistory } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { styled } from '@mui/material/styles';
 import useAuth from 'hooks/useAuth';
-import NavBar from './NavBar';
+import LeftBar from './LeftBar';
 import TopBar from './TopBar';
 import RightBar from './RightBar';
 import Page from '../Page';
@@ -79,7 +79,7 @@ const Dashboard: FC<DashboardLayoutProps> = ({ children }) => {
       />
       <Wrapper>
         <SidePanel>
-          <NavBar
+          <LeftBar
             onMobileClose={handleMobileClose}
             openMobile={isMobileNavOpen}
           />

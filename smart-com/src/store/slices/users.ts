@@ -84,13 +84,11 @@ const slice = createSlice({
       state.currentPage = action.payload;
     },
     followUser(state: UsersState, action) {
-      const { id }: any = action.payload;
-      console.log('action.payload - follow', action.payload)
+      const id: string = action.payload;
       state.users.byId[id].followed = true;
     },
     unfollowUser(state: UsersState, action) {
-      const { id }: any = action.payload;
-      console.log('action.payload - unfollow', action.payload)
+      const id: string = action.payload;
       state.users.byId[id].followed = false;
     }
   },

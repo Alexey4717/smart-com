@@ -39,19 +39,20 @@ const User = ({ id }: OwnProps) => {
 
   const handleFollowUser = useCallback(async () => {
     try {
-      const response = await usersAPI.follow(userId);
+      const {
+        messages,
+        resultCode,
+      } = await usersAPI.follow(userId);
 
-      console.log('response', response);
-
-      if (response.resultCode === 0) {
+      if (resultCode === 0) {
         dispatch(followUser(id));
         enqueueSnackbar(
           `Вы успешно подписались на пользователя ${name}`,
           { variant: 'success' }
         );
       } else {
-        if (response.messages.length) {
-          throw new Error(response.messages[0]);
+        if (messages.length) {
+          throw new Error(messages[0]);
         } else {
           throw new Error()
         }
@@ -67,19 +68,20 @@ const User = ({ id }: OwnProps) => {
   const handleUnfollowUser = useCallback(async () => {
 
     try {
-      const response = await usersAPI.unfollow(userId);
+      const {
+        messages,
+        resultCode,
+      } = await usersAPI.unfollow(userId);
 
-      console.log('resultCode', response.resultCode);
-
-      if (response.resultCode === 0) {
+      if (resultCode === 0) {
         dispatch(unfollowUser(id))
         enqueueSnackbar(
           `Вы успешно отписались от пользователя ${name}`,
           { variant: 'success' }
         );
       } else {
-        if (response.messages.length) {
-          throw new Error(response.messages[0]);
+        if (messages.length) {
+          throw new Error(messages[0]);
         } else {
           throw new Error()
         }

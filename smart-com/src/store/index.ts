@@ -8,6 +8,7 @@ import { authReducer } from './slices/auth';
 import { appReducer } from './slices/app';
 import { profileReducer } from './slices/profile';
 import { usersReducer } from './slices/users';
+import { chatReducer } from './slices/chat';
 
 const devTools = process.env.NODE_ENV === 'development';
 
@@ -16,7 +17,8 @@ export const store = configureStore({
     auth: authReducer,
     app: appReducer,
     profile: profileReducer,
-    users: usersReducer
+    users: usersReducer,
+    chat: chatReducer
   },
   devTools
 });

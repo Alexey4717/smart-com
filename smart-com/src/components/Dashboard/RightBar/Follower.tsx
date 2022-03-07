@@ -11,7 +11,7 @@ const Container = styled('div')(({ theme }) => ({
   display: 'flex', 
   backgroundColor: theme.palette.secondary.main, 
   margin: '3px',
-  borderRadius: '25px',
+  borderRadius: '35px',
   padding: '5px'
 }))
 
@@ -19,7 +19,11 @@ const Follower = ({ name, photo }) => {
 
   return (
     <Container>
-      <Avatar sx={{ width: 55, height: 55 }} alt={`photo of ${name}`} src={photo} />
+      <Avatar 
+        sx={{ width: 55, height: 55 }} 
+        alt={name.toUpperCase()} 
+        src={photo ? photo : "dummy.js"} 
+      />
       <Box sx={{ 
         display: 'flex',
         flexDirection: 'column',

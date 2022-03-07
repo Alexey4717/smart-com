@@ -48,34 +48,6 @@ export const getUsersData = createAsyncThunk/*<UsersResponse>*/(
     return response;
   });
 
-// type FollowingUserRequest = {
-//   userId: string
-// };
-
-// interface FollowingUserResponse extends APIResponseType {
-//   id?: string
-// };
-
-// export const followUser = createAsyncThunk/*<UsersResponse>*/(
-//   `${sliceName}/followUser`,
-//   async (
-//     { userId }: FollowingUserRequest
-//   ): Promise<FollowingUserResponse> => {
-//     const response = await usersAPI.follow(userId);
-//     response.data.id = userId;
-//     return response;
-//   });
-
-// export const unfollowUser = createAsyncThunk/*<UsersResponse>*/(
-//   `${sliceName}/unfollowUser`,
-//   async (
-//     { userId }: FollowingUserRequest
-//   ): Promise<FollowingUserResponse> => {
-//     const response = await usersAPI.unfollow(userId);
-//     response.data.id = userId;
-//     return response;
-//   });
-
 const slice = createSlice({
   name: sliceName,
   initialState,

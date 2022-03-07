@@ -29,9 +29,6 @@ const Box = styled('div')(({ theme }) => ({
   borderRadius: '0 0 10px 10px'
 }));
 
-
-
-
 const RightBar = () => {
   const [followersData, setFollowersData] = useState<UserType[]>([]);
   const [totalFollowersCount, setTotalFollowersCount] = useState<number>();

@@ -74,7 +74,6 @@ const Profile = () => {
     <View
       pageTitle="Профиль"
       pageSubTitle={subTitle}
-      isLoading={isLoading}
     >
       {isLoading ? <Loader /> : profile && (
         <>

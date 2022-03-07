@@ -57,7 +57,6 @@ const Dialogs = () => {
     <View
       pageTitle="Чат"
       pageSubTitle={subTitle}
-      isLoading={isPending}
     >
       {isPending ? <Loader /> : (
         <Box sx={{

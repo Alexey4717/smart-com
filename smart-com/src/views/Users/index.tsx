@@ -76,22 +76,17 @@ const Users = () => {
     <View
       pageTitle="Пользователи"
       pageSubTitle={subTitle}
-      isLoading={isLoading}
       search={{
         query: term,
         placeholder: 'Поиск пользователей',
         onSubmit: handleSearch
       }}
+      pagination={{
+        count,
+        currentPage,
+        handleChange: handleChangeCurrentPage
+      }}
     >
-      <Pagination
-        count={count}
-        page={currentPage}
-        onChange={handleChangeCurrentPage}
-        siblingCount={5}
-        shape="rounded"
-        showFirstButton
-        showLastButton
-      />
       {isLoading ? <Loader /> : users && <UsersData />}
       {(loadingStatus === ERROR) && (
         <Alert severity="error">

@@ -68,7 +68,7 @@ const Profile = () => {
         </Typography>
       </Button>
     </Box>
-  ), [isEditMode]);
+  ), [isEditMode, palette.text.secondary, toggleEditMode]);
 
   return (
     <View

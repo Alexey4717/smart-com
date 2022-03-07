@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import View from 'components/View';
 import {
@@ -6,7 +6,6 @@ import {
   Box,
   Typography
 } from '@mui/material';
-import { useTheme } from '@mui/system';
 import {
   errorsSelector,
   statusSelector
@@ -17,13 +16,14 @@ import { getProfileById } from 'store/slices/profile';
 import { authUserIdSelector } from 'store/selectors/auth';
 import { 
   startMessagesListening,
-  stopMessagesListening
+  stopMessagesListening,
+  resetMessages
 } from 'store/slices/chat';
 import Dialog from './Dialog';
 
 const { PENDING, ERROR } = StatusLoadingWs;
 
-const Dialogs = () => {
+const Chat = () => {
 
   const dispatch = useDispatch();
   
@@ -37,11 +37,12 @@ const Dialogs = () => {
   }, [dispatch, authUserId]);
 
   useEffect(() => {
-    dispatch(startMessagesListening())
+    dispatch(startMessagesListening());
     return () => {
-      dispatch(stopMessagesListening())
+      dispatch(stopMessagesListening());
+      dispatch(resetMessages());
     }
-  }, []);
+  }, [dispatch]);
 
   const subTitle = useMemo(() => (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -78,4 +79,4 @@ const Dialogs = () => {
   )
 };
 
-export default Dialogs;
+export default Chat;

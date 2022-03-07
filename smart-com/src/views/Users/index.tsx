@@ -4,10 +4,8 @@ import View from 'components/View';
 import {
   Alert,
   Box,
-  Typography,
-  Pagination
+  Typography
 } from '@mui/material';
-import { useTheme } from '@mui/system';
 import {
   errorsSelector,
   statusSelector,
@@ -20,12 +18,10 @@ import { DataLoadingStates } from 'types/utility';
 import UsersData from './UsersData';
 import Loader from 'components/Loader';
 import { getUsersData, setCurrentPage } from 'store/slices/users';
-import { authUserIdSelector } from 'store/selectors/auth';
 
 const { LOADING, ERROR } = DataLoadingStates;
 
 const Users = () => {
-  const { palette } = useTheme();
 
   const users = useSelector(usersIdsSelector);
   const totalUsersCount = useSelector(totalUsersCountSelector);
@@ -38,7 +34,6 @@ const Users = () => {
   const count = Math.ceil(totalUsersCount / pageSize);
 
   const dispatch = useDispatch();
-  const authUserId = useSelector(authUserIdSelector);
 
   const [term, setTerm] = useState<string>('');
 
@@ -59,7 +54,7 @@ const Users = () => {
       setTerm(term);
       dispatch(getUsersData({ currentPage: 1, pageSize, term, friend: null }));
     },
-    [setTerm, pageSize, term]
+    [dispatch, setTerm, pageSize]
   );
 
   const subTitle = useMemo(() => (

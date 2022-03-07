@@ -12,7 +12,6 @@ import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import { getUserByIdSelector } from 'store/selectors/users';
 import { followUser, unfollowUser } from 'store/slices/users';
 import { usersAPI } from 'store/api/users';
-import type { APIResponseType } from 'store/api';
 
 interface OwnProps {
   id: string
@@ -31,11 +30,6 @@ const User = ({ id }: OwnProps) => {
   } = useSelector(getUserByIdSelector(id));
 
   const userId = Number(id);
-
-  type Response = {
-    resultCode: number;
-    messages: string[];
-  };
 
   const handleFollowUser = useCallback(async () => {
     try {
@@ -63,7 +57,7 @@ const User = ({ id }: OwnProps) => {
         { variant: 'error' }
       );
     }
-  }, [userId]);
+  }, [dispatch, enqueueSnackbar, name, userId, id]);
 
   const handleUnfollowUser = useCallback(async () => {
 
@@ -92,14 +86,14 @@ const User = ({ id }: OwnProps) => {
         { variant: 'error' }
       );
     }
-  }, [userId]);
+  }, [dispatch, enqueueSnackbar, name, userId, id]);
 
   return (
     <ImageListItem>
       <img
         src={`${userPhoto ? userPhoto : '/static/user-photo.png'}?w=248&fit=crop&auto=format`}
         srcSet={`${userPhoto ? userPhoto : '/static/user-photo.png'}?w=248&fit=crop&auto=format&dpr=2 2x`}
-        alt={`photo of ${name}`}
+        alt={name}
         loading="lazy"
       //style={{ width: '600px', height: '600px' }}
       />

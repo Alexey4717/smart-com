@@ -11,7 +11,7 @@ const UsersData = () => {
     usersIds.map(id => (
       <User id={id} key={id} />
     ))
-  ), [usersIds.length]);
+  ), [usersIds]);
 
   return (
     <ImageList 

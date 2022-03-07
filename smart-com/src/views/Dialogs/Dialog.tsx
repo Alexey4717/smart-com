@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
+import { useSelector } from 'react-redux';
 import { Paper, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import TextInput from "components/TextInput";
+import TextInput from "./TextInput";
 import Message from "./Message";
+import { messagesSelector } from 'store/selectors/chat';
+import { authUserIdSelector } from 'store/selectors/auth';
+import type { Message as TypeMessage } from 'types/dialogs'
 
 const Container = styled(Paper)({
   display: "flex",
@@ -10,13 +14,58 @@ const Container = styled(Paper)({
   justifyContent: 'space-between',
   width: "500px",
   height: "500px",
+  boxShadow: 'none'
 });
 
+
 const Dialog = () => {
+  const messages: TypeMessage[] = useSelector(messagesSelector);
+  const authUserId = useSelector(authUserIdSelector);
+
+  const [isAutoScroll, setIsAutoScroll] = useState(true);
+
+  const messagesAnchorRef = useRef<HTMLDivElement>(null);
+
+  const scrollHandler = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
+    const element = e.currentTarget;
+    if (Math.abs((element.scrollHeight - element.scrollTop) - element.clientHeight) < 300) {
+      !isAutoScroll && setIsAutoScroll(true)
+    } else {
+      isAutoScroll && setIsAutoScroll(false)
+    }
+  }
+
+  useEffect(() => {
+    if (isAutoScroll) {
+      messagesAnchorRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [messages])
+
+
+  const messagesToRender = useMemo(() => (
+    messages.map(({
+      id,
+      userId,
+      userName,
+      message,
+      photo
+    }) => {
+      const isMyMessage = authUserId === userId;
+      return (
+        <Message
+          message={message}
+          photo={photo}
+          userName={userName}
+          key={id}
+          isMyMessage={isMyMessage}
+        />
+      )
+    })
+  ), [messages.length]);
 
   return (
-    <Container>
-      <Box sx={{ 
+    <Container onScroll={scrollHandler}>
+      <Box sx={{
         display: 'flex',
         flexDirection: 'column',
         px: 2,
@@ -24,48 +73,10 @@ const Dialog = () => {
         overflowY: 'scroll',
         '&::-webkit-scrollbar-thumb': {
           border: `5px solid white`
-        } 
+        }
       }}>
-        <Message
-          message="h fghfghfg fhfgh fgfh f"
-          timestamp="MM/DD 00:00"
-          photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-          displayName="Вася"
-        />
-        <Message
-          message="fghfghghff fhfg fghfg fgh f hfh fh fgh fg"
-          timestamp="MM/DD 00:00"
-          photoURL=""
-          displayName="Вася"
-        />
-        <Message
-          message="gfhfgh fh fgh fg fgh fg hfg"
-          timestamp="MM/DD 00:00"
-          photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-          displayName="Петя"
-          isMyMessage
-        />
-        <Message
-          message="m fgh fhfghggfh f hfh"
-          timestamp="MM/DD 00:00"
-          photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-          displayName="Петя"
-          isMyMessage
-        />
-        <Message
-          message="m fgh fhfghggfh f hfh"
-          timestamp="MM/DD 00:00"
-          photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-          displayName="Петя"
-          isMyMessage
-        />
-        <Message
-          message="m fgh fhfghggfh f hfh"
-          timestamp="MM/DD 00:00"
-          photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-          displayName="Петя"
-          isMyMessage
-        />
+        {messagesToRender}
+        <div ref={messagesAnchorRef}></div>
       </Box>
       <TextInput />
     </Container>

@@ -1,16 +1,14 @@
 import React from "react";
 import { Avatar, Box, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import type { Message as TypeMessage } from 'types/dialogs';
 
-interface StyledProps {
-  isMyMessage?: boolean
-};
+type StyledProps = Pick<TypeMessage, 'isMyMessage'>;
 
 const MessageBody = styled('div')<StyledProps>(({ isMyMessage = false }) => ({
   position: "relative",
   padding: "10px 10px 0 10px",
   backgroundColor: isMyMessage ? "#A8DDFD" : "#f8e896",
-  width: "250px",
   border: `1px solid ${isMyMessage ? '#97C6E3' : '#dfd087'}`,
   borderRadius: '10px',
   "&:after": {
@@ -39,27 +37,13 @@ const MessageBody = styled('div')<StyledProps>(({ isMyMessage = false }) => ({
   }
 }))
 
-const MessageTimeStamp = styled('div')<StyledProps>(({ isMyMessage }) => ({
-  marginTop: "10px",
-  textAlign: isMyMessage ? 'left' : 'right',
-  fontStyle: 'italic'
-}));
-
-interface OwnProps extends StyledProps {
-  message: string,
-  timestamp: string,
-  photoURL: string,
-  displayName: string,
-};
-
 const Message = ({
+  userName,
   message,
-  timestamp,
-  photoURL,
-  displayName,
+  photo,
   isMyMessage = false
-}: OwnProps) => {
-
+}: TypeMessage) => {
+  
   return (
     <Box sx={{ 
       display: 'flex', 
@@ -68,8 +52,8 @@ const Message = ({
     }}>
       <Avatar
         sx={{ order: isMyMessage ? 1 : 0 }}
-        alt={displayName.toUpperCase()}
-        src={photoURL ? photoURL : "dummy.js"}
+        alt={userName.toUpperCase()}
+        src={photo ? photo : "dummy.js"}
       />
       <Box sx={{ 
         order: isMyMessage ? 0 : 1,
@@ -80,15 +64,12 @@ const Message = ({
           sx={{ textAlign: isMyMessage ? 'right' : 'left' }}
           component='p'
         >
-          {displayName ? displayName : "безымянный человек"}
+          {userName ? userName : "безымянный человек"}
         </Typography>
         <MessageBody isMyMessage={isMyMessage}>
           <Typography component="p">
             {message ? message : "no message"}
           </Typography>
-          <MessageTimeStamp isMyMessage={isMyMessage}>
-            {timestamp ? timestamp : ""}
-          </MessageTimeStamp>
         </MessageBody>
       </Box>
     </Box>

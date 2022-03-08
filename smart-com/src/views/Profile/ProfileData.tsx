@@ -4,19 +4,12 @@ import { useSnackbar } from 'notistack';
 import {
   Typography,
   List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Collapse,
   Button,
   Box,
   Avatar
 } from '@mui/material';
 import TextField from 'components/TextField';
 import Tooltip from '@mui/material/Tooltip';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import ViewListIcon from '@mui/icons-material/ViewList';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import CircleIcon from '@mui/icons-material/Circle';
 import { styled } from '@mui/material/styles';
@@ -27,8 +20,6 @@ import { profileAPI } from 'store/api/profile';
 import type { APIResponseType } from 'store/api';
 import { setStatus, getProfileById } from 'store/slices/profile';
 import Service from './Service';
-import { flexbox } from '@mui/system';
-import Followers from './Followers';
 
 const ProflieAvatar = styled(Avatar)(({ theme }) => ({
   width: 300,
@@ -63,7 +54,11 @@ const LookingForAJobItem = styled(Box)({
   }
 })
 
-const ProfileData = () => {
+interface OwnProps {
+  isAuthUser: boolean;
+};
+
+const ProfileData = ({ isAuthUser }: OwnProps) => {
 
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
@@ -83,7 +78,9 @@ const ProfileData = () => {
   const [editStatusMode, setEditStatusMode] = useState<boolean>(false);
 
   const toggleEditStatusMode = useCallback(() => {
-    setEditStatusMode(opened => !opened);
+    if (isAuthUser) {
+      setEditStatusMode(opened => !opened);
+    }
   }, [setEditStatusMode]);
 
   const uploadPhoto = useCallback(async (photoFile: File) => {
@@ -114,7 +111,7 @@ const ProfileData = () => {
     };
 
     dispatch(getProfileById(userId));
-  }, [userId]);
+  }, [dispatch, enqueueSnackbar, userId]);
 
   const changeUserStatus = useCallback(async (status: string) => {
     try {
@@ -145,7 +142,7 @@ const ProfileData = () => {
     };
 
     toggleEditStatusMode();
-  }, [editStatusMode]);
+  }, [dispatch, enqueueSnackbar, toggleEditStatusMode]);
 
   const handleUploadPhoto = (event) => {
     uploadPhoto(event.target.files[0])
@@ -155,7 +152,7 @@ const ProfileData = () => {
     services.map(service => (
       <Service name={service[0]} link={service[1]} key={service[0]} />
     ))
-  ), [services.length]);
+  ), [services]);
 
   return (
     <Box sx={{
@@ -180,19 +177,21 @@ const ProfileData = () => {
             alt="profile-avatar"
             src={photos.large}
           />
-          <Tooltip title="Нажмите для загрузки 1 фотографии">
-            <AddPhotoButton
-              variant="text"
-              //component="label"
-              onChange={handleUploadPhoto}
-            >
-              <AddAPhotoIcon />
-              <input
-                type="file"
-                hidden
-              />
-            </AddPhotoButton>
-          </Tooltip>
+          {isAuthUser && (
+            <Tooltip title="Нажмите для загрузки 1 фотографии">
+              <AddPhotoButton
+                variant="text"
+                //component="label"
+                onChange={handleUploadPhoto}
+              >
+                <AddAPhotoIcon />
+                <input
+                  type="file"
+                  hidden
+                />
+              </AddPhotoButton>
+            </Tooltip>
+          )}
         </Box>
         <Typography
           sx={{
@@ -233,9 +232,15 @@ const ProfileData = () => {
                   onBlur={(event) => changeUserStatus(event.target.value)}
                 />
                 :
-                <Tooltip title="Двойной клик по статусу для его изменения">
+                <Tooltip
+                  title={
+                    isAuthUser
+                      ? 'Двойной клик по статусу для его изменения'
+                      : ''
+                  }
+                >
                   <Typography
-                    sx={{ cursor: 'pointer' }}
+                    sx={{ cursor: isAuthUser ? 'pointer' : 'inherit' }}
                   >
                     {userStatus}
                   </Typography>
@@ -306,7 +311,6 @@ const ProfileData = () => {
           </Box>
         </Box>
       </Box>
-      <Followers />
     </Box>
   )
 };

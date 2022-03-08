@@ -36,14 +36,22 @@ const slice = createSlice({
     },
     setErrors(state:ChatState, action) {
       state.errors = action.payload;
-    }
+    },
+    resetMessages(state: ChatState) {
+      const {
+        messages
+      } = initialState;
+
+      state.messages = messages;
+    },
   }
 });
 
 export const {
   setMessages,
   changeStatus,
-  setErrors
+  setErrors,
+  resetMessages
 } = slice.actions;
 
 let _newMessageHandler: ((messages: ChatMessageAPIType[]) => void) | null = null

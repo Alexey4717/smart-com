@@ -40,7 +40,7 @@ const NavItem: FC<NavItemProps> = ({
   const activeLinkStyle = {
     color: 'white',
     backgroundColor: 'gray',
-    borderRight: '5px solid black',
+    borderRight: '5px solid #253858',
     fontWeight: 900,
     '& $title': {
       fontWeight: 500,

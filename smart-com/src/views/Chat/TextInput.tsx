@@ -43,17 +43,19 @@ const TextInput = () => {
     setErrors,
     setStatus,
     setSubmitting,
+    resetForm
   }) => {
     try {
       dispatch(sendMessage(values.message));
       setStatus({ success: true });
       setSubmitting(false);
+      resetForm();
     } catch (err) {
       setStatus({ success: false });
       setErrors({ submit: err?.response?.data?.detail ?? err.message });
       setSubmitting(false);
     }
-  }, []);
+  }, [dispatch]);
 
   return (
     <Formik

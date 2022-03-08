@@ -35,7 +35,7 @@
     "check-types": "tsc --skipLibCheck --noEmit",
     "lint": "eslint --ext .ts,.tsx,.js,.jsx src/",
     "lint:fix": "eslint --ext .ts,.tsx,.js,.jsx src/ --cache --fix --quiet",
-    "prepare": "rm -rf .husky && cd ../.. && husky install src/rk-rao/.husky && cd src/rk-rao && npx husky add .husky/pre-commit \"cd src/rk-rao && npx lint-staged\""
+    "prepare": "rm -rf .husky && cd ../.. && husky install smart-com/.husky && cd smart-com && npx husky add .husky/pre-commit \"cd smart-com && npx lint-staged\""
   },
   "eslintConfig": {
     "extends": [

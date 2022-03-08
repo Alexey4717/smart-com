@@ -24,7 +24,7 @@ const Service = ({ name, link }) => {
 
   return (
     <ListItemIcon>
-      <a href={link} target="_blank">
+      <a href={link} target="_blank" rel="noreferrer">
         <SocialIcon
           style={{ width: '40px', height: '40px' }}
           network={networkName}

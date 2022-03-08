@@ -21,6 +21,7 @@ const {
   profile,
   chat,
   users,
+  dialogs,
   pageNotFound
 } = paths;
 
@@ -81,6 +82,10 @@ export const routes: RoutesType = [
       {
         path: users,
         component: lazy(() => import('views/Users'))
+      },
+      {
+        path: dialogs,
+        component: lazy(() => import('views/Dialogs'))
       }
     ]
   },

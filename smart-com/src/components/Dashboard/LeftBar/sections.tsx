@@ -7,7 +7,8 @@ import type { Section } from './types';
 const {
   profile: profilePath,
   chat: chatPath,
-  users: usersPath
+  users: usersPath,
+  dialogs: dialogsPath
 } = paths;
 
 const sections: Section[] = [
@@ -25,6 +26,11 @@ const sections: Section[] = [
     title: 'Пользователи',
     icon: PeopleIcon,
     href: usersPath
+  },
+  {
+    title: 'Переписки',
+    icon: ChatIcon,
+    href: dialogsPath
   }
 ];
 

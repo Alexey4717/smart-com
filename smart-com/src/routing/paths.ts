@@ -10,7 +10,8 @@ const paths: Record<string, string> = {
   home: `${root}`,
   profile: `${root}/profile/`,
   chat: `${root}/chat/`,
-  users: `${root}/users/`
+  users: `${root}/users/`,
+  dialogs: `${root}/dialogs/`,
 };
 
 export default paths;

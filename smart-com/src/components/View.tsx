@@ -7,8 +7,6 @@ import {
   Pagination,
   Skeleton
 } from '@mui/material';
-import type { ButtonProps, IconButtonProps } from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Page from 'components/Page';
 import { styled } from '@mui/material/styles';
 import SearchField from './SearchField';
@@ -26,7 +24,8 @@ interface OwnProps {
     count: number;
     currentPage: number
     handleChange: (event: React.ChangeEvent<unknown>, value: number) => void;
-  }
+  },
+  isLoading?: boolean;
 }
 
 const ViewContainer = styled(Page)(({ theme }) => ({
@@ -41,7 +40,8 @@ const View: FC<OwnProps> = ({
   pageSubTitle,
   children,
   search,
-  pagination
+  pagination,
+  isLoading = false,
 }) => {
 
   const searchEnabled = Boolean(search);
@@ -54,11 +54,11 @@ const View: FC<OwnProps> = ({
           <Grid item xs>
             {pageTitle && (
               <Typography variant="h3" color="textPrimary">
-                {pageTitle}
+                {isLoading ? <Skeleton width={480} /> : pageTitle}
               </Typography>
             )}
             {pageSubTitle && (
-              <div>{pageSubTitle}</div>
+              <div>{isLoading ? <Skeleton width={320} /> : pageSubTitle}</div>
             )}
           </Grid>
           {searchEnabled && (

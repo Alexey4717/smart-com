@@ -1,9 +1,10 @@
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
-import {  
-  Typography, 
-  Button, 
+import {
+  Typography,
+  Button,
   ImageListItem,
   ImageListItemBar
 } from '@mui/material';
@@ -12,7 +13,9 @@ import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import { getUserByIdSelector } from 'store/selectors/users';
 import { followUser, unfollowUser } from 'store/slices/users';
 import { usersAPI } from 'store/api/users';
+import paths from 'routing/paths';
 
+const profilePath = paths.profile;
 interface OwnProps {
   id: string
 };
@@ -90,23 +93,25 @@ const User = ({ id }: OwnProps) => {
 
   return (
     <ImageListItem>
-      <img
-        src={`${userPhoto ? userPhoto : '/static/user-photo.png'}?w=248&fit=crop&auto=format`}
-        srcSet={`${userPhoto ? userPhoto : '/static/user-photo.png'}?w=248&fit=crop&auto=format&dpr=2 2x`}
-        alt={name}
-        loading="lazy"
-      //style={{ width: '600px', height: '600px' }}
-      />
+      <NavLink to={profilePath + userId}>
+        <img
+          src={`${userPhoto ? userPhoto : '/static/user-photo.png'}?w=248&fit=crop&auto=format`}
+          srcSet={`${userPhoto ? userPhoto : '/static/user-photo.png'}?w=248&fit=crop&auto=format&dpr=2 2x`}
+          alt={name}
+          loading="lazy"
+        style={{ width: '300px', height: '300px' }}
+        />
+      </NavLink>
       <ImageListItemBar
         sx={{ pr: 2 }}
         title={name}
         subtitle={status ? status : 'Статус отсутствует'}
         actionIcon={
           <Button
-            sx={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              backgroundColor: 'rgba(66, 82, 110, 0.86)' 
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              backgroundColor: 'rgba(66, 82, 110, 0.86)'
             }}
             variant="contained"
             aria-label={`info about ${name}`}

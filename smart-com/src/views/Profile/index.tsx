@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import View from 'components/View';
 import {
   Alert,
@@ -27,6 +28,10 @@ const { LOADING, ERROR } = DataLoadingStates;
 const Profile = () => {
   const { palette } = useTheme();
 
+  const urlLevelList = useHistory().location.pathname.split('/');
+  const uriId = urlLevelList[urlLevelList.length - 1];
+  const isUriId = (Boolean(uriId) && uriId !== 'profile') ? true : false;
+
   const [isEditMode, setIsEditMode] = useState(false);
 
   const profile = useSelector(profileSelector);
@@ -41,8 +46,16 @@ const Profile = () => {
   const dispatch = useDispatch();
   const authUserId = useSelector(authUserIdSelector);
 
+  const isAuthUser = Boolean(authUserId === Number(uriId) || !isUriId);
+
+  console.log('isAuthUser', isAuthUser)
+
   useEffect(() => {
-    dispatch(getProfileById(authUserId));
+    if (!isUriId) {
+      dispatch(getProfileById(authUserId));
+    } else {
+      dispatch(getProfileById(Number(uriId)));
+    }
   }, [dispatch, authUserId]);
 
 
@@ -50,23 +63,25 @@ const Profile = () => {
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       <Box sx={{ marginRight: 2 }}>
         <Typography color="textSecondary">
-          Вашего аккаунта
+          {isAuthUser ? 'Вашего аккаунта' : 'Чужого аккаунта'}
         </Typography>
       </Box>
-      <Button variant="text" onClick={toggleEditMode}>
-        {isEditMode
-          ? <HighlightOffIcon
-            sx={{ display: 'block' }}
-            color={palette.text.secondary}
-          />
-          : <ManageAccountsIcon
-            sx={{ display: 'block' }}
-            color={palette.text.secondary}
-          />}
-        <Typography color="textSecondary">
-          {isEditMode ? 'Отменить редактирование' : 'Редактировать'}
-        </Typography>
-      </Button>
+      {isAuthUser && (
+        <Button variant="text" onClick={toggleEditMode}>
+          {isEditMode
+            ? <HighlightOffIcon
+              sx={{ display: 'block' }}
+              color={palette.text.secondary}
+            />
+            : <ManageAccountsIcon
+              sx={{ display: 'block' }}
+              color={palette.text.secondary}
+            />}
+          <Typography color="textSecondary">
+            {isEditMode ? 'Отменить редактирование' : 'Редактировать'}
+          </Typography>
+        </Button>
+      )}
     </Box>
   ), [isEditMode, palette.text.secondary, toggleEditMode]);
 
@@ -77,9 +92,9 @@ const Profile = () => {
     >
       {isLoading ? <Loader /> : profile && (
         <>
-          {isEditMode 
-            ? <ProfileEditor setIsEditMode={setIsEditMode} /> 
-            : <ProfileData />}
+          {isEditMode
+            ? <ProfileEditor setIsEditMode={setIsEditMode} />
+            : <ProfileData isAuthUser={isAuthUser} />}
         </>
       )}
       {(loadingStatus === ERROR) && (

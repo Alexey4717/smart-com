@@ -54,7 +54,11 @@ const LookingForAJobItem = styled(Box)({
   }
 })
 
-const ProfileData = () => {
+interface OwnProps {
+  isAuthUser: boolean;
+};
+
+const ProfileData = ({ isAuthUser }: OwnProps) => {
 
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
@@ -74,7 +78,9 @@ const ProfileData = () => {
   const [editStatusMode, setEditStatusMode] = useState<boolean>(false);
 
   const toggleEditStatusMode = useCallback(() => {
-    setEditStatusMode(opened => !opened);
+    if (isAuthUser) {
+      setEditStatusMode(opened => !opened);
+    }
   }, [setEditStatusMode]);
 
   const uploadPhoto = useCallback(async (photoFile: File) => {
@@ -171,19 +177,21 @@ const ProfileData = () => {
             alt="profile-avatar"
             src={photos.large}
           />
-          <Tooltip title="Нажмите для загрузки 1 фотографии">
-            <AddPhotoButton
-              variant="text"
-              //component="label"
-              onChange={handleUploadPhoto}
-            >
-              <AddAPhotoIcon />
-              <input
-                type="file"
-                hidden
-              />
-            </AddPhotoButton>
-          </Tooltip>
+          {isAuthUser && (
+            <Tooltip title="Нажмите для загрузки 1 фотографии">
+              <AddPhotoButton
+                variant="text"
+                //component="label"
+                onChange={handleUploadPhoto}
+              >
+                <AddAPhotoIcon />
+                <input
+                  type="file"
+                  hidden
+                />
+              </AddPhotoButton>
+            </Tooltip>
+          )}
         </Box>
         <Typography
           sx={{
@@ -224,9 +232,15 @@ const ProfileData = () => {
                   onBlur={(event) => changeUserStatus(event.target.value)}
                 />
                 :
-                <Tooltip title="Двойной клик по статусу для его изменения">
+                <Tooltip
+                  title={
+                    isAuthUser
+                      ? 'Двойной клик по статусу для его изменения'
+                      : ''
+                  }
+                >
                   <Typography
-                    sx={{ cursor: 'pointer' }}
+                    sx={{ cursor: isAuthUser ? 'pointer' : 'inherit' }}
                   >
                     {userStatus}
                   </Typography>

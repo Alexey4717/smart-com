@@ -9,6 +9,7 @@ import { appReducer } from './slices/app';
 import { profileReducer } from './slices/profile';
 import { usersReducer } from './slices/users';
 import { chatReducer } from './slices/chat';
+import { dialogsReducer } from './slices/dialogs';
 
 const devTools = process.env.NODE_ENV === 'development';
 
@@ -18,7 +19,8 @@ export const store = configureStore({
     app: appReducer,
     profile: profileReducer,
     users: usersReducer,
-    chat: chatReducer
+    chat: chatReducer,
+    dialogs: dialogsReducer
   },
   devTools
 });

@@ -1,8 +1,17 @@
-export type Message = {
-  id?: string;
-  userId?: number;
+export type Dialog = {
+  id: number;
   userName: string;
-  message: string;
-  photo: string;
-  isMyMessage?: boolean;
+  hasNewMessages: boolean;
+  lastDialogActivityDate: string;
+  lastUserActivityDate: string;
+  newMessagesCount: number;
+  photos: {
+    small: string | null;
+    large: string | null;
+  }
+};
+
+export type Messages = {
+  items: [] //исправить
+  totalCount: number
 };

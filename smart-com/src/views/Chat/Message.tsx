@@ -1,7 +1,7 @@
 import React from "react";
 import { Avatar, Box, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import type { Message as TypeMessage } from 'types/dialogs';
+import type { Message as TypeMessage } from 'types/chat';
 
 type StyledProps = Pick<TypeMessage, 'isMyMessage'>;
 

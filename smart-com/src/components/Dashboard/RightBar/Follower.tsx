@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 import { 
   Avatar, 
   Box, 
@@ -6,6 +9,8 @@ import {
   Typography 
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { dialogsAPI } from 'store/api/dialogs';
+import { setDialog } from 'store/slices/dialogs';
 
 const Container = styled('div')(({ theme }) => ({
   display: 'flex', 
@@ -15,7 +20,36 @@ const Container = styled('div')(({ theme }) => ({
   padding: '5px'
 }))
 
-const Follower = ({ name, photo }) => {
+const Follower = ({ id, name, photo }) => {
+
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const startDialog = useCallback(async () => {
+    try {
+      const { 
+        resultCode,
+        messages
+      } = await dialogsAPI.startDialog(id);
+
+      if (resultCode === 0) {
+        dispatch(setDialog);
+        history.push(`/dialogs/${id}`);
+      } else {
+        if (messages) {
+          throw new Error(messages)
+        } else {
+          throw new Error()
+        }
+      }
+    } catch (error) {
+      enqueueSnackbar(
+        `Возникла ошибка при попытке устанровить диалог ${error ? error : ''}`,
+        { variant: 'error' }
+      );
+    }
+  }, []);
 
   return (
     <Container>
@@ -47,6 +81,7 @@ const Follower = ({ name, photo }) => {
         <Button 
           sx={{ fontSize: '10px' }}
           variant="text"
+          onClick={startDialog}
         >
           Написать
         </Button>

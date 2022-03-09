@@ -72,7 +72,7 @@ const RightBar = () => {
         },
       }}>
         {followersData.map(({ id, name, photos: { small } }) => (
-          <Follower name={name} photo={small} key={id} />
+          <Follower id={id} name={name} photo={small} key={id} />
         ))}
       </Box>
     </Wrapper>

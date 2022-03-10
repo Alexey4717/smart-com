@@ -8,7 +8,7 @@ export interface DialogsState {
   status: DataLoadingStates;
   errors: string | string[];
   dialogs: Dialog[]; //исправить
-  messages: Messages[]; //исправить
+  messages: Messages; //исправить
   spamMessages: any[]; //исправить
   deletedMessages: any[]; //исправить
   newMessagesCount: number;
@@ -20,14 +20,17 @@ const initialState: DialogsState = {
   status: DataLoadingStates.IDLE,
   errors: null,
   dialogs: [],
-  messages: [],
+  messages: {
+    items: [],
+    totalCount: 0
+  },
   spamMessages: [],
   deletedMessages: [],
   newMessagesCount: 0
 };
 
 interface AllDialogsResponse {
-  data: any[]; //исправить
+  data: Dialog[]; //исправить
   resultCode?: number | string;
 };
 
@@ -46,11 +49,13 @@ const slice = createSlice({
       state.dialogs.push(action.payload);
     },
     setMessages(state: DialogsState, action) {
-      state.messages = action.payload;
+      const { items, totalCount } = action.payload;
+      state.messages.items = items;
+      state.messages.totalCount = totalCount;
     },
     setMessage(state: DialogsState, action) {
       const { message } = action.payload;
-      state.messages.push(message);
+      //state.messages.items.push(message);
     },
     setIsMessageViewed(state: DialogsState, action) {
 
@@ -91,10 +96,11 @@ export const {
   setNewMessagesCount
 } = slice.actions;
 
-export const getMessages = (userId): AppThunk => async (dispatch) => {
-  const response = await dialogsAPI.getMessages(userId);
-  dispatch(setMessages(response));
-};
+// export const getMessages = (userId): AppThunk => async (dispatch) => {
+//   const response = await dialogsAPI.getMessages(userId);
+//   console.log('messages', response)
+//   dispatch(setMessages(response.items));
+// };
 
 export const { reducer: dialogsReducer } = slice;
 

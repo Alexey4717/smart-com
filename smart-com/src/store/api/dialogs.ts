@@ -5,7 +5,7 @@ export const dialogsAPI = {
         return instance.put/*<APIResponseType>*/(`dialogs/${userId}`).then(res => res.data);
     },
     getAllDialogs() {
-        return instance.get(`dialogs`).then(res => res.data)/* as Promise<APIResponseType>*/
+        return instance.get(`dialogs`).then(res => res)/* as Promise<APIResponseType>*/
     },
     getMessages(userId: number, page: number = 1, count: number = 10) {
         return instance.get(`dialogs/${userId}/messages?page=${page}&count=${count}`).then(res => res.data);

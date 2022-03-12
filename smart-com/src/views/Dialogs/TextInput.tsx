@@ -9,15 +9,16 @@ import {
   Field
 } from 'formik';
 import TextField from 'components/TextField';
-import { sendMessage } from 'store/slices/chat';
+import { setMessage } from 'store/slices/dialogs';
 import { statusSelector } from 'store/selectors/chat';
+import { dialogsAPI } from 'store/api/dialogs';
 import {
   string as yupString,
   object as yupObject
 } from 'yup';
 
 export const validationSchema = yupObject().shape({
-  message: yupString().max(255).required(),
+  message: yupString().max(255),
 });
 
 export const initialValues = {
@@ -34,27 +35,43 @@ const Container = styled('div')({
   backgroundColor: '#bfbaba'
 });
 
-const TextInput = () => {
+interface OwnProps {
+  userId: number
+}
+
+const TextInput = ({ userId }: OwnProps) => {
 
   const dispatch = useDispatch();
-  const status = useSelector(statusSelector);
 
-  const handleSubmit = useCallback((values, {
+  const handleSubmit = useCallback(async (values, {
     setErrors,
     setStatus,
     setSubmitting,
     resetForm
   }) => {
     try {
-      dispatch(sendMessage(values.message));
-      setStatus({ success: true });
-      setSubmitting(false);
-      resetForm();
-    } catch (err) {
+      const {
+        data: { message },
+        fieldsErrors,
+        resultCode
+      } = await dialogsAPI.sendMessage(userId, values.message);
+
+      if (resultCode === 0) {
+        dispatch(setMessage(message));
+        setStatus({ success: true });
+        setSubmitting(false);
+      } else if (fieldsErrors.length) {
+        throw new Error(fieldsErrors[0]);
+      } else {
+        throw new Error();
+      }
+
+    } catch (error) {
       setStatus({ success: false });
-      setErrors({ submit: err?.response?.data?.detail ?? err.message });
+      setErrors({ submit: error?.response?.data?.detail ?? error.message });
       setSubmitting(false);
     }
+    resetForm();
   }, [dispatch]);
 
   return (
@@ -91,7 +108,7 @@ const TextInput = () => {
               variant="contained"
               color="primary"
               type="submit"
-              disabled={status !== 'ready' && isSubmitting}
+              disabled={isSubmitting}
             >
               <SendIcon />
             </Button>

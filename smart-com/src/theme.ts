@@ -77,8 +77,8 @@ const theme = createTheme({
           padding: 0,
           margin: 0,
           boxSizing: 'border-box',
-          scrollbarColor: `${primary} ${textLight}`,
-          scrollbarWidth: 'thin',
+          scrollbarColor: 'none',
+          scrollbarWidth: 'none',
           '&::-webkit-scrollbar': {
             width: '15px',
             height: '15px',

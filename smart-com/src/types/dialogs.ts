@@ -11,7 +11,18 @@ export type Dialog = {
   }
 };
 
+export type Message = {
+  addedAt: string
+  body: string
+  id: string
+  recipientId: number
+  senderId: number
+  senderName: string
+  translatedBody: unknown
+  viewed: boolean
+};
+
 export type Messages = {
-  items: [] //исправить
-  totalCount: number
+  items: Message[];
+  totalCount: number;
 };

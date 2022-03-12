@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { useSnackbar } from 'notistack';
-import { Paper, Box } from '@mui/material';
+import { Paper, Box, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import TextInput from "./TextInput";
 import Message from "components/Message";
@@ -13,6 +13,7 @@ import { dialogsAPI } from 'store/api/dialogs';
 
 const Container = styled(Paper)({
   display: "flex",
+  flexGrow: 1,
   flexDirection: "column",
   justifyContent: 'space-between',
   width: "500px",
@@ -21,10 +22,15 @@ const Container = styled(Paper)({
 });
 
 
-const Dialog = ({ userId }) => {
+const Dialog = ({
+  userId,
+  //yourPhoto, 
+  //recipientPhoto 
+}) => {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const { items: messages, totalCount } = useSelector(messagesSelector);
+
   const authUserId = useSelector(authUserIdSelector);
 
   const [isAutoScroll, setIsAutoScroll] = useState(true);
@@ -45,7 +51,7 @@ const Dialog = ({ userId }) => {
       try {
         const { items, totalCount, error } = await dialogsAPI.getMessages(userId);
 
-        if (items) {
+        if (items && totalCount !== undefined) {
           dispatch(setMessages({ items, totalCount }));
         } else if (error) {
           throw new Error(error);
@@ -55,7 +61,7 @@ const Dialog = ({ userId }) => {
 
       } catch (error) {
         enqueueSnackbar(
-          `Возникла ошибка в процессе авторизации: ${error}`,
+          `Возникла ошибка в процессе загрузки сообщений: ${error}`,
           { variant: 'error' }
         );
       }
@@ -72,20 +78,25 @@ const Dialog = ({ userId }) => {
 
   const messagesToRender = useMemo(() => (
     messages?.map(({
-      // id,
-      // userId,
-      // userName,
-      // message,
-      // photo
+      addedAt,
+      body,
+      id,
+      //recipientId: number
+      senderId,
+      senderName,
+      viewed
     }) => {
-      //const isMyMessage = authUserId === userId;
+      const isMyMessage = authUserId === senderId;
       return (
         <Message
-          message={'message'}
-          photo={'photo'}
-          userName={'userName'}
-        //key={id}
-        //isMyMessage={isMyMessage}
+          id={id}
+          message={body}
+          //photo={'photo'}
+          userName={senderName}
+          key={id}
+          isMyMessage={isMyMessage}
+          viewed={viewed}
+          addedDate={addedAt}
         />
       )
     })
@@ -103,10 +114,14 @@ const Dialog = ({ userId }) => {
           border: `5px solid white`
         }
       }}>
-        {messages?.length ? messagesToRender : 'нет сообщений'}
+        {
+          messages?.length
+            ? messagesToRender
+            : <Typography sx={{ m: 'auto' }}>Нет сообщений</Typography>
+        }
         <div ref={messagesAnchorRef}></div>
       </Box>
-      <TextInput />
+      <TextInput userId={userId} />
     </Container>
   );
 };

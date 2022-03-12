@@ -9,9 +9,9 @@ const paths: Record<string, string> = {
   /* AUTH */
   home: `${root}`,
   profile: `${root}/profile/`,
-  chat: `${root}/chat/`,
-  users: `${root}/users/`,
   dialogs: `${root}/dialogs/`,
+  users: `${root}/users/`,
+  chat: `${root}/chat/`,
 };
 
 export default paths;

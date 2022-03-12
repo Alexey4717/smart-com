@@ -4,13 +4,9 @@ import {
   Box,
   Typography
 } from '@mui/material';
-import { dialogsSelector } from 'store/selectors/dialogs';
 import Follower from './Follower';
 
-const Followers = () => {
-
-  
-  const dialogs = useSelector(dialogsSelector);
+const Followers = ({ dialogs }) => {
 
   const dialogsToRender = useMemo(() => (
     dialogs?.map((dialog) => (
@@ -19,7 +15,13 @@ const Followers = () => {
   ), [dialogs?.length]);
 
   return (
-    <Box>
+    <Box sx={{
+      display: 'inline-flex',
+      flexDirection: 'column',
+      overflowY: 'scroll',
+      pr: 2,
+      mr: 1
+    }}>
       {dialogsToRender}
     </Box>
   )

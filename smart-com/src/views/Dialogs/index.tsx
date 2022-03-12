@@ -14,7 +14,8 @@ import Button from '@mui/material/Button';
 import { useTheme } from '@mui/system';
 import {
   errorsSelector,
-  statusSelector
+  statusSelector,
+  dialogsSelector
 } from 'store/selectors/dialogs';
 import { DataLoadingStates } from 'types/utility';
 import Loader from 'components/Loader';
@@ -22,6 +23,7 @@ import { getAllDialogs } from 'store/slices/dialogs';
 import { usersAPI } from 'store/api/users';
 import Followers from './Followers';
 import Dialog from './Dialog';
+import useIdFromHistory from 'hooks/useIdFromHistory';
 
 const { LOADING, ERROR } = DataLoadingStates;
 
@@ -31,12 +33,11 @@ const Dialogs = () => {
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
 
-  const urlLevelList = useHistory().location.pathname.split('/');
-  const uriId = urlLevelList[urlLevelList.length - 1];
-  const isUriId = Boolean(uriId) && uriId !== 'dialogs';
+  const { isUriId, uriId } = useIdFromHistory();
 
   const errors = useSelector(errorsSelector);
   const loadingStatus = useSelector(statusSelector);
+  const dialogs = useSelector(dialogsSelector);
 
   const isLoading = loadingStatus === LOADING;
 
@@ -56,13 +57,31 @@ const Dialogs = () => {
 
   return (
     <View
-      pageTitle="Сообщения"
+      pageTitle="Переписка"
       pageSubTitle={subTitle}
     >
-      {isLoading ? <Loader /> : (
-        <Box sx={{ display: 'flex' }}>
-          <Followers />
-          {isUriId && <Dialog userId={uriId} />}
+      {isLoading ? <Loader /> : dialogs && (
+        <Box 
+          sx={{ 
+            display: 'flex', 
+            height: '500px', 
+            overflow: 'hidden'
+          }}
+        >
+          <Followers dialogs={dialogs} />
+          {
+            isUriId
+              ? <Dialog
+                userId={uriId}
+              //yourPhoto={dialogs.photos.small} 
+              //recipientPhoto={dialogs.photos.small} 
+              />
+              : <Typography
+                sx={{ m: 'auto' }}
+              >
+                Для вывода сообщений нажмите на соответствующий диалог
+              </Typography>
+          }
         </Box>
       )}
       {(loadingStatus === ERROR) && (

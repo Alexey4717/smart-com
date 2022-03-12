@@ -3,6 +3,8 @@ export type Message = {
   userId?: number;
   userName: string;
   message: string;
-  photo: string;
+  photo?: string;
   isMyMessage?: boolean;
+  viewed?: boolean;
+  addedDate?: string;
 };

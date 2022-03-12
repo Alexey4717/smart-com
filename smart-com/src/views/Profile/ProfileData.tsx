@@ -4,13 +4,13 @@ import { useSnackbar } from 'notistack';
 import {
   Typography,
   List,
-  Button,
   Box,
   Avatar
 } from '@mui/material';
 import TextField from 'components/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import AddIcon from '@mui/icons-material/Add';
 import CircleIcon from '@mui/icons-material/Circle';
 import { styled } from '@mui/material/styles';
 import {
@@ -27,7 +27,7 @@ const ProflieAvatar = styled(Avatar)(({ theme }) => ({
   border: `10px solid ${theme.palette.background.default}`
 }));
 
-const AddPhotoButton = styled(Button)(({ theme }) => ({
+const AddPhoto = styled('label')(({ theme }) => ({
   position: 'absolute',
   right: '10%',
   top: '10%',
@@ -38,9 +38,11 @@ const AddPhotoButton = styled(Button)(({ theme }) => ({
   width: '45px',
   height: '45px',
   borderRadius: '50%',
-  border: `2px solid ${theme.palette.primary.main}`,
+  border: `3px solid ${theme.palette.background.default}`,
+  padding: '8px 8px 6px 6px',
+  cursor: 'pointer',
   '&:hover': {
-    backgroundColor: '#fff'
+    backgroundColor: 'gray'
   }
 }));
 
@@ -82,6 +84,8 @@ const ProfileData = ({ isAuthUser }: OwnProps) => {
       setEditStatusMode(opened => !opened);
     }
   }, [setEditStatusMode]);
+
+  console.log('isAuthUser', isAuthUser)
 
   const uploadPhoto = useCallback(async (photoFile: File) => {
     try {
@@ -154,6 +158,16 @@ const ProfileData = ({ isAuthUser }: OwnProps) => {
     ))
   ), [services]);
 
+  const tooltipTitleForStatus = useMemo(() => (
+    isAuthUser
+      ? (
+        userStatus
+          ? 'Двойной клик по статусу для его изменения'
+          : 'Двойной клик для добавления статуса'
+      )
+      : ''
+  ), [isAuthUser, userStatus]);
+
   return (
     <Box sx={{
       display: 'flex',
@@ -179,17 +193,10 @@ const ProfileData = ({ isAuthUser }: OwnProps) => {
           />
           {isAuthUser && (
             <Tooltip title="Нажмите для загрузки 1 фотографии">
-              <AddPhotoButton
-                variant="text"
-                //component="label"
-                onChange={handleUploadPhoto}
-              >
+              <AddPhoto onChange={handleUploadPhoto}>
                 <AddAPhotoIcon />
-                <input
-                  type="file"
-                  hidden
-                />
-              </AddPhotoButton>
+                <input type="file" hidden />
+              </AddPhoto>
             </Tooltip>
           )}
         </Box>
@@ -220,6 +227,7 @@ const ProfileData = ({ isAuthUser }: OwnProps) => {
             onDoubleClick={toggleEditStatusMode}
           >
             Статус:
+            <br />
             {
               editStatusMode
                 ? <TextField
@@ -233,16 +241,15 @@ const ProfileData = ({ isAuthUser }: OwnProps) => {
                 />
                 :
                 <Tooltip
-                  title={
-                    isAuthUser
-                      ? 'Двойной клик по статусу для его изменения'
-                      : ''
-                  }
+                  title={tooltipTitleForStatus}
                 >
                   <Typography
-                    sx={{ cursor: isAuthUser ? 'pointer' : 'inherit' }}
+                    sx={{
+                      display: 'inline-block',
+                      cursor: isAuthUser ? 'pointer' : 'inherit'
+                    }}
                   >
-                    {userStatus}
+                    {userStatus ? userStatus : (isAuthUser && <AddIcon />)}
                   </Typography>
                 </Tooltip>
             }

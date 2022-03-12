@@ -54,8 +54,27 @@ const slice = createSlice({
       state.messages.totalCount = totalCount;
     },
     setMessage(state: DialogsState, action) {
-      const { message } = action.payload;
-      //state.messages.items.push(message);
+      const {
+        id,
+        body,
+        translatedBody,
+        addedAt,
+        senderId,
+        senderName,
+        recipientId,
+        viewed
+      } = action.payload;
+
+      state.messages.items.push({
+        id,
+        body,
+        translatedBody,
+        addedAt,
+        senderId,
+        senderName,
+        recipientId,
+        viewed
+      });
     },
     setIsMessageViewed(state: DialogsState, action) {
 

@@ -24,6 +24,7 @@ import Loader from 'components/Loader';
 import { getProfileById } from 'store/slices/profile';
 import { authUserIdSelector } from 'store/selectors/auth';
 import { usersAPI } from 'store/api/users';
+import useIdFromHistory from 'hooks/useIdFromHistory';
 
 const { LOADING, ERROR } = DataLoadingStates;
 
@@ -32,9 +33,7 @@ const Profile = () => {
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
 
-  const urlLevelList = useHistory().location.pathname.split('/');
-  const uriId = urlLevelList[urlLevelList.length - 1];
-  const isUriId = Boolean(uriId) && uriId !== 'profile';
+  const { isUriId, uriId } = useIdFromHistory();
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [isFollowUser, setIsFollowUser] = useState<boolean>(false);

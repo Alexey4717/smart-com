@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 import View from 'components/View';
 import {
   Alert,
@@ -22,33 +23,32 @@ import ProfileEditor from './ProfileEditor';
 import Loader from 'components/Loader';
 import { getProfileById } from 'store/slices/profile';
 import { authUserIdSelector } from 'store/selectors/auth';
+import { usersAPI } from 'store/api/users';
+import useIdFromHistory from 'hooks/useIdFromHistory';
 
 const { LOADING, ERROR } = DataLoadingStates;
 
 const Profile = () => {
   const { palette } = useTheme();
+  const { enqueueSnackbar } = useSnackbar();
+  const dispatch = useDispatch();
 
-  const urlLevelList = useHistory().location.pathname.split('/');
-  const uriId = urlLevelList[urlLevelList.length - 1];
-  const isUriId = (Boolean(uriId) && uriId !== 'profile') ? true : false;
+  const { isUriId, uriId } = useIdFromHistory();
 
   const [isEditMode, setIsEditMode] = useState(false);
+  const [isFollowUser, setIsFollowUser] = useState<boolean>(false);
 
   const profile = useSelector(profileSelector);
   const errors = useSelector(errorsSelector);
   const loadingStatus = useSelector(statusSelector);
+  const authUserId = useSelector(authUserIdSelector);
+
+  const isAuthUser = Boolean(authUserId === Number(uriId) || !isUriId);
   const isLoading = loadingStatus === LOADING;
 
   const toggleEditMode = useCallback(() => {
     setIsEditMode(editMode => !editMode)
   }, [setIsEditMode]);
-
-  const dispatch = useDispatch();
-  const authUserId = useSelector(authUserIdSelector);
-
-  const isAuthUser = Boolean(authUserId === Number(uriId) || !isUriId);
-
-  console.log('isAuthUser', isAuthUser)
 
   useEffect(() => {
     if (!isUriId) {
@@ -58,12 +58,36 @@ const Profile = () => {
     }
   }, [dispatch, authUserId]);
 
+  useEffect(() => {
+    const getFollowToUserInfo = async () => {
+      if (isUriId) {
+        try {
+          const response = await usersAPI.isFollow(Number(uriId));
+          setIsFollowUser(response);
+        } catch (error) {
+          enqueueSnackbar(
+            `Возникла ошибка при определении подписки пользователя${error ? `: ${error}` : ''}.`,
+            { variant: 'error' }
+          );
+        }
+      };
+    }
+    getFollowToUserInfo();
+  }, []);
 
   const subTitle = useMemo(() => (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       <Box sx={{ marginRight: 2 }}>
         <Typography color="textSecondary">
-          {isAuthUser ? 'Вашего аккаунта' : 'Чужого аккаунта'}
+          {
+            isAuthUser
+              ? 'Вашего аккаунта'
+              : (
+                isFollowUser
+                  ? 'Вашего подписчика'
+                  : 'Чужого аккаунта'
+              )
+          }
         </Typography>
       </Box>
       {isAuthUser && (
@@ -83,12 +107,13 @@ const Profile = () => {
         </Button>
       )}
     </Box>
-  ), [isEditMode, palette.text.secondary, toggleEditMode]);
+  ), [isEditMode, isFollowUser, palette.text.secondary, toggleEditMode]);
 
   return (
     <View
       pageTitle="Профиль"
       pageSubTitle={subTitle}
+      isLoading={isLoading}
     >
       {isLoading ? <Loader /> : profile && (
         <>

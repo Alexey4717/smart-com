@@ -1,5 +1,6 @@
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ChatIcon from '@mui/icons-material/Chat';
+import ForumIcon from '@mui/icons-material/Forum';
 import PeopleIcon from '@mui/icons-material/People';
 import paths from 'routing/paths';
 import type { Section } from './types';
@@ -7,7 +8,8 @@ import type { Section } from './types';
 const {
   profile: profilePath,
   chat: chatPath,
-  users: usersPath
+  users: usersPath,
+  dialogs: dialogsPath
 } = paths;
 
 const sections: Section[] = [
@@ -17,14 +19,19 @@ const sections: Section[] = [
     href: profilePath
   },
   {
-    title: 'Чат',
+    title: 'Переписки',
     icon: ChatIcon,
-    href: chatPath
+    href: dialogsPath
   },
   {
     title: 'Пользователи',
     icon: PeopleIcon,
     href: usersPath
+  },
+  {
+    title: 'Общий чат',
+    icon: ForumIcon,
+    href: chatPath
   }
 ];
 

@@ -3,10 +3,10 @@ import { useSelector } from 'react-redux';
 import { Paper, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import TextInput from "./TextInput";
-import Message from "./Message";
+import Message from "components/Message";
 import { messagesSelector } from 'store/selectors/chat';
 import { authUserIdSelector } from 'store/selectors/auth';
-import type { Message as TypeMessage } from 'types/dialogs'
+import type { Message as TypeMessage } from 'types/chat'
 
 const Container = styled(Paper)({
   display: "flex",

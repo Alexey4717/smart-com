@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { AppThunk } from '../';
-import type { Message } from 'types/dialogs';
+import type { Message } from 'types/chat';
 import { Dispatch } from 'redux';
 import { v1 } from 'uuid';
 import { StatusLoadingWs } from 'types/utility';

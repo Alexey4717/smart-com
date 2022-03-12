@@ -22,7 +22,7 @@ const Box = styled('div')(({ theme }) => ({
   flexDirection: 'column',
   width: '100%',
   height: '500px',
-  overflow: 'scroll',
+  overflowY: 'scroll',
   padding: '5px',
   backgroundColor: 'white',
   border: `1px solid ${theme.palette.primary.main}`,
@@ -72,7 +72,7 @@ const RightBar = () => {
         },
       }}>
         {followersData.map(({ id, name, photos: { small } }) => (
-          <Follower name={name} photo={small} key={id} />
+          <Follower id={id} name={name} photo={small} key={id} />
         ))}
       </Box>
     </Wrapper>

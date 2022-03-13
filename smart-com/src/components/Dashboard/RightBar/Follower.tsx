@@ -2,34 +2,26 @@ import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { NavLink, useHistory } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
-import {
-  Avatar,
-  Box,
-  Button,
-  Typography
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
 import { dialogsAPI } from 'store/api/dialogs';
 import { setDialog } from 'store/slices/dialogs';
 import paths from 'routing/paths';
+import {
+  Wrapper,
+  Items,
+  Avatar,
+  NameItem
+} from './styles';
 
 const dialogsPath = paths.dialogs;
-
-const Container = styled('div')(({ theme }) => ({
-  display: 'flex',
-  backgroundColor: theme.palette.secondary.main,
-  margin: '3px',
-  borderRadius: '35px',
-  padding: '5px'
-}))
+const profilePath = paths.profile;
 
 const Follower = ({ id, name, photo }) => {
 
   const dispatch = useDispatch();
-  const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
 
-  const startDialog = useCallback(async () => {
+  const startDialog = useCallback(async (event) => {
+    event.stopPropagation();
     try {
       const {
         resultCode,
@@ -54,40 +46,36 @@ const Follower = ({ id, name, photo }) => {
   }, []);
 
   return (
-    <Container>
-      <Avatar
-        sx={{ width: 55, height: 55 }}
-        alt={name.toUpperCase()}
-        src={photo ? photo : "dummy.js"}
-      />
-      <Box sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        px: 2
-      }}>
-        <Typography
-          sx={{
-            display: 'block',
-            pl: 1,
-            maxWidth: '110px',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap'
-          }}
-          component='span'
-        >
-          {name}
-        </Typography>
-        <NavLink 
-          to={dialogsPath + id} 
-          onClick={startDialog}
-        >
-          Написать
-        </NavLink>
-      </Box>
-    </Container>
+    <NavLink
+      style={{
+        textDecoration: 'none',
+        color: 'inherit'
+      }}
+      to={profilePath + id}
+    >
+      <Wrapper>
+        <Avatar
+          alt={name.toUpperCase()}
+          src={photo ? photo : "dummy.js"}
+        />
+        <Items>
+          <NameItem>
+            {name}
+          </NameItem>
+          <NavLink
+            style={{
+              textDecoration: 'none',
+              color: 'inherit',
+              fontSize: 14
+            }}
+            to={dialogsPath + id}
+            onClick={startDialog}
+          >
+            Написать
+          </NavLink>
+        </Items>
+      </Wrapper>
+    </NavLink>
   );
 };
 

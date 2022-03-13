@@ -1,58 +1,33 @@
 import {
   useState,
-  useCallback
+  useCallback,
+  useMemo
 } from 'react';
 import type { FC, ReactNode } from 'react';
+import { useTheme } from '@mui/system';
 import { useHistory } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
-import { styled } from '@mui/material/styles';
 import useAuth from 'hooks/useAuth';
+import useElementWidth from 'hooks/useElementWidth';
+import {
+  DashboardLayout,
+  Wrapper,
+  CentralPanel
+} from './styles';
 import LeftBar from './LeftBar';
 import TopBar from './TopBar';
 import RightBar from './RightBar';
-import Page from '../Page';
 
 interface DashboardLayoutProps {
   children?: ReactNode;
 };
 
-const DashboardLayout = styled(Page)(() => ({
-  display: 'flex',
-  height: '100%',
-  width: '100%',
-}));
-
-const Wrapper = styled(Page)(() => ({
-  display: 'flex',
-  flex: '1 1 auto',
-  paddingTop: 64,
-}));
-
-const SidePanel = styled(Page)(() => ({
-  flexBasis: '250px'
-}));
-
-const CentralPanel = styled(Page)(() => ({
-  display: 'flex',
-  flex: '1 1 calc(100% - 500px)',
-}));
-
-const Content = styled(Page)(() => ({
-  flex: '1 1 auto',
-  height: '100%',
-  overflow: 'auto',
-}));
-
 const Dashboard: FC<DashboardLayoutProps> = ({ children }) => {
+  const { breakpoints } = useTheme();
   const history = useHistory();
   const { logout } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const [isMobileNavOpen, setMobileNavOpen] = useState<boolean>(false);
-
-  const handleMobileOpen = useCallback(
-    () => setMobileNavOpen(true),
-    [setMobileNavOpen],
-  );
 
   const handleMobileClose = useCallback(
     () => setMobileNavOpen(false),
@@ -71,27 +46,34 @@ const Dashboard: FC<DashboardLayoutProps> = ({ children }) => {
     }
   }, [logout, history, enqueueSnackbar]);
 
+  const [ref, width] = useElementWidth();
+
+  const isMoreLg = useMemo(() => (
+    width > breakpoints.values.lg
+  ), [width]);
+
+  const isLessSm = useMemo(() => (
+    width < breakpoints.values.sm
+  ), [width]);
+
   return (
-    <DashboardLayout>
+    <DashboardLayout ref={ref}>
       <TopBar
-        onMobileNavOpen={handleMobileOpen}
         onLogoutClick={handleLogout}
       />
       <Wrapper>
-        <SidePanel>
-          <LeftBar
-            onMobileClose={handleMobileClose}
-            openMobile={isMobileNavOpen}
-          />
-        </SidePanel>
+        <LeftBar
+          onMobileClose={handleMobileClose}
+          openMobile={isMobileNavOpen}
+          isMoreLg={isMoreLg}
+          isLessSm={isLessSm}
+        />
         <CentralPanel>
-          <Content>
+
             {children}
-          </Content>
+
         </CentralPanel>
-        <SidePanel>
-          <RightBar />
-        </SidePanel>
+        <RightBar />
       </Wrapper>
     </DashboardLayout>
   );

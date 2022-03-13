@@ -13,7 +13,6 @@ import {
   Divider,
   Typography
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import useAuth from 'hooks/useAuth';
 import useIsMountedRef from 'hooks/useIsMountedRef';
 import { captchaUrlSelector } from 'store/selectors/security'
@@ -23,11 +22,7 @@ import {
   initialValues,
   validationSchema
 } from './formSettings';
-
-const CaptchaImage = styled('img')(() => ({
-  display: 'block',
-  margin: '10px auto'
-}))
+import { CaptchaImage } from './styles';
 
 const LoginForm: FC = () => {
   const { login } = useAuth() as any;

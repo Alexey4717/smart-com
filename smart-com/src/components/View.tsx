@@ -32,7 +32,10 @@ const ViewContainer = styled(Page)(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
   minHeight: '100%',
   paddingTop: theme.spacing(3),
-  paddingBottom: theme.spacing(3)
+  paddingBottom: theme.spacing(3),
+  [theme.breakpoints.down('sm')]: {
+    paddingTop: theme.spacing(7)
+  },
 }));
 
 const View: FC<OwnProps> = ({

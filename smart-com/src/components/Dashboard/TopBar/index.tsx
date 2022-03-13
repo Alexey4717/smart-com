@@ -2,35 +2,25 @@ import type { FC } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { RootState, useSelector } from 'store';
 import {
-  AppBar as MuiAppBar,
   Box,
   Hidden,
   IconButton,
-  Toolbar as MuiToolbar,
   SvgIcon
 } from '@mui/material';
-import Typography from '@mui/material/Typography';
-import { styled } from '@mui/material/styles';
-import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
-import AppTitle from './AppTitle';
-import Logo from './Logo';
+import {
+  AppBar,
+  Toolbar,
+  NameItem,
+  Title,
+  AppLogo
+} from './styles';
 
 interface TopBarProps {
   className?: string;
   onMobileNavOpen?: () => void;
   onLogoutClick: () => void;
-}
-
-const AppBar = styled(MuiAppBar)(({ theme }) => ({
-  zIndex: theme.zIndex.drawer + 101,
-  boxShadow: 'none',
-  backgroundColor: theme.palette.primary.main
-}));
-
-const Toolbar = styled(MuiToolbar)(() => ({
-  minHeight: 64,
-}));
+};
 
 const TopBar: FC<TopBarProps> = ({
   onMobileNavOpen,
@@ -46,32 +36,24 @@ const TopBar: FC<TopBarProps> = ({
   return (
     <AppBar {...rest}>
       <Toolbar>
-        <Hidden lgUp>
-          <IconButton
-            color="inherit"
-            onClick={onMobileNavOpen}
-          >
-            <SvgIcon>
-              <MenuIcon />
-            </SvgIcon>
-          </IconButton>
-        </Hidden>
         <Hidden mdDown>
           <RouterLink to="/">
-            <Logo />
+            <AppLogo
+              alt="Smart Com"
+              src="/static/logo.png"
+            />
           </RouterLink>
         </Hidden>
-        <AppTitle />
+        <Title>
+          Smart Community
+        </Title>
         <Box
           ml={2}
           flexGrow={1}
         />
-        <Typography
-          variant="h5"
-          color="textPromary"
-        >
+        <NameItem>
           {userName}
-        </Typography>
+        </NameItem>
         <Box ml={2}>
           <IconButton
             color="inherit"

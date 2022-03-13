@@ -1,33 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { styled } from '@mui/material/styles';
 import { usersAPI } from 'store/api/users';
 import type { GetItemsType } from 'store/api';
 import type { UserType } from 'types/user';
 import Follower from './Follower';
-
-const Wrapper = styled('div')({
-  margin: '10px 10px 10px 0',
-});
-
-const Header = styled('span')(({ theme }) => ({
-  display: 'block',
-  color: 'white',
-  backgroundColor: theme.palette.primary.main,
-  borderRadius: ' 10px 10px 0 0',
-  textAlign: 'center'
-}));
-
-const Box = styled('div')(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  width: '100%',
-  height: '500px',
-  overflowY: 'scroll',
-  padding: '5px',
-  backgroundColor: 'white',
-  border: `1px solid ${theme.palette.primary.main}`,
-  borderRadius: '0 0 10px 10px'
-}));
+import {
+  Container,
+  Header,
+  Box
+} from './styles';
 
 const RightBar = () => {
   const [followersData, setFollowersData] = useState<UserType[]>([]);
@@ -62,20 +42,16 @@ const RightBar = () => {
   }, []);
 
   return (
-    <Wrapper>
+    <Container>
       <Header>
         Подписчики ({totalFollowersCount}):
       </Header>
-      <Box sx={{
-        '&::-webkit-scrollbar-thumb': {
-          border: `5px solid white`
-        },
-      }}>
+      <Box>
         {followersData.map(({ id, name, photos: { small } }) => (
           <Follower id={id} name={name} photo={small} key={id} />
         ))}
       </Box>
-    </Wrapper>
+    </Container>
   )
 };
 

@@ -33,9 +33,19 @@ const ViewContainer = styled(Page)(({ theme }) => ({
   minHeight: '100%',
   paddingTop: theme.spacing(3),
   paddingBottom: theme.spacing(3),
-  [theme.breakpoints.down('sm')]: {
-    paddingTop: theme.spacing(7)
+  [theme.breakpoints.down('md')]: {
+    width: '100%',
+    '&::-webkit-scrollbar': { width: 0 }
   },
+  [theme.breakpoints.down('sm')]: {
+    paddingTop: theme.spacing(7),
+  },
+}));
+
+const Wrapper = styled(Container)(({ theme }) => ({
+  [theme.breakpoints.down('sm')]: {
+    padding: 0
+  }
 }));
 
 const View: FC<OwnProps> = ({
@@ -52,7 +62,7 @@ const View: FC<OwnProps> = ({
 
   return (
     <ViewContainer title={pageTitle}>
-      <Container maxWidth={false}>
+      <Wrapper sx={{px: 0}}>
         <Grid container spacing={3} alignItems="baseline">
           <Grid item xs>
             {pageTitle && (
@@ -88,7 +98,7 @@ const View: FC<OwnProps> = ({
           </Box>
         )}
         <Box mt={3}>{children}</Box>
-      </Container>
+      </Wrapper>
     </ViewContainer>
   );
 };

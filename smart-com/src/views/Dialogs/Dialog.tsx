@@ -21,12 +21,7 @@ const Container = styled(Paper)({
   boxShadow: 'none'
 });
 
-
-const Dialog = ({
-  userId,
-  //yourPhoto, 
-  //recipientPhoto 
-}) => {
+const Dialog = ({ userId }) => {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const { items: messages, totalCount } = useSelector(messagesSelector);
@@ -75,13 +70,11 @@ const Dialog = ({
     }
   }, [messages])
 
-
   const messagesToRender = useMemo(() => (
     messages?.map(({
       addedAt,
       body,
       id,
-      //recipientId: number
       senderId,
       senderName,
       viewed
@@ -91,7 +84,6 @@ const Dialog = ({
         <Message
           id={id}
           message={body}
-          //photo={'photo'}
           userName={senderName}
           key={id}
           isMyMessage={isMyMessage}

@@ -1,6 +1,7 @@
 import * as axios from "axios";
 import {UserType} from 'types/user';
-import { apiKey } from 'config_secret';
+
+const apiKey = process.env.REACT_APP_API_KEY;
 
 export const instance = axios.default.create({
     withCredentials: true,

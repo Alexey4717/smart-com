@@ -23,6 +23,7 @@ export const CentralPanel = styled(Page)(({ theme }) => ({
   overflow: 'auto',
   [theme.breakpoints.down('md')]: {
     flexBasis: '100%',
-    marginBottom: 103
+    marginBottom: 103,
+    '&::-webkit-scrollbar': { width: 0 }
   }
 }));

@@ -4,8 +4,7 @@ import View from 'components/View';
 import {
   Alert,
   Box,
-  Typography,
-  CardMedia
+  Typography
 } from '@mui/material';
 import {
   errorsSelector,

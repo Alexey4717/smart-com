@@ -87,6 +87,7 @@ const SearchField: FC<OwnProps> = ({ query, placeholder, onSubmit }) => {
         value={searchQuery}
         size="small"
         variant="outlined"
+        fullWidth
       />
     </Container>
   );

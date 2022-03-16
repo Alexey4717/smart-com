@@ -1,12 +1,16 @@
 import React, { useMemo, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  Box,
-  Typography
-} from '@mui/material';
+import { Box } from '@mui/material';
+import type { Dialog } from 'types/dialogs';
 import Follower from './Follower';
 
-const Followers = ({ dialogs }) => {
+interface OwnProps {
+  dialogs: Dialog[];
+  isSm: boolean;
+  isUriId: boolean;
+};
+
+const Followers = ({ dialogs, isSm, isUriId }: OwnProps) => {
 
   const dialogsToRender = useMemo(() => (
     dialogs?.map((dialog) => (
@@ -16,8 +20,9 @@ const Followers = ({ dialogs }) => {
 
   return (
     <Box sx={{
-      display: 'inline-flex',
+      display: !isSm && isUriId ? 'none' : 'flex',
       flexDirection: 'column',
+      flexBasis: '400px',
       overflowY: 'scroll',
       pr: 2,
       mr: 1

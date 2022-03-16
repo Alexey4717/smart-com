@@ -32,6 +32,7 @@ interface OwnProps {
 const ViewContainer = styled(Page)(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
   minHeight: '100%',
+  width: '100%',
   paddingTop: theme.spacing(3),
   paddingBottom: theme.spacing(3),
   [theme.breakpoints.down('md')]: {

@@ -10,13 +10,13 @@ import { authUserIdSelector } from 'store/selectors/auth';
 import type { Message as TypeMessage } from 'types/chat';
 import { setMessages } from 'store/slices/dialogs';
 import { dialogsAPI } from 'store/api/dialogs';
+import Header from './Header';
 
 const Container = styled(Paper)({
   display: "flex",
   flexGrow: 1,
   flexDirection: "column",
   justifyContent: 'space-between',
-  width: "500px",
   height: "500px",
   boxShadow: 'none'
 });
@@ -96,6 +96,10 @@ const Dialog = ({ userId }) => {
 
   return (
     <Container onScroll={scrollHandler}>
+      <Header 
+        userName={userId}
+        totalCountMessages={totalCount}
+      />
       <Box sx={{
         display: 'flex',
         flexDirection: 'column',

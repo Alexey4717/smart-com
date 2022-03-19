@@ -23,7 +23,7 @@ const Service = ({ name, link }) => {
   };
 
   return (
-    <ListItemIcon>
+    <ListItemIcon sx={{ pt: 1 }}>
       <a href={link} target="_blank" rel="noreferrer">
         <SocialIcon
           style={{ width: '40px', height: '40px' }}

@@ -6,7 +6,8 @@ import View from 'components/View';
 import {
   Alert,
   Box,
-  Typography
+  Typography,
+  Skeleton
 } from '@mui/material';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
@@ -90,22 +91,6 @@ const Profile = () => {
           }
         </Typography>
       </Box>
-      {isAuthUser && (
-        <Button variant="text" onClick={toggleEditMode}>
-          {isEditMode
-            ? <HighlightOffIcon
-              sx={{ display: 'block' }}
-              color={palette.text.secondary}
-            />
-            : <ManageAccountsIcon
-              sx={{ display: 'block' }}
-              color={palette.text.secondary}
-            />}
-          <Typography color="textSecondary">
-            {isEditMode ? 'Отменить редактирование' : 'Редактировать'}
-          </Typography>
-        </Button>
-      )}
     </Box>
   ), [isEditMode, isFollowUser, palette.text.secondary, toggleEditMode]);
 
@@ -115,6 +100,33 @@ const Profile = () => {
       pageSubTitle={subTitle}
       isLoading={isLoading}
     >
+      {isAuthUser && (
+        (isLoading
+          ? <Skeleton sx={{ mx: 'auto' }} width={200} />
+          : <Button
+            sx={{
+              display: 'flex',
+              mx: 'auto',
+              mb: 2
+            }}
+            variant="text"
+            onClick={toggleEditMode}
+          >
+            {isEditMode
+              ? <HighlightOffIcon
+                sx={{ display: 'block' }}
+                color={palette.text.secondary}
+              />
+              : <ManageAccountsIcon
+                sx={{ display: 'block' }}
+                color={palette.text.secondary}
+              />}
+            <Typography color="textSecondary">
+              {isEditMode ? 'Отменить редактирование' : 'Редактировать'}
+            </Typography>
+          </Button>
+        )
+      )}
       {isLoading ? <Loader /> : profile && (
         <>
           {isEditMode

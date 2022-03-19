@@ -1,8 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useSnackbar } from 'notistack';
-import * as Yup from 'yup';
 import {
-  Form,
+  Form as FormikForm,
   Formik,
   Field
 } from 'formik';
@@ -10,7 +9,7 @@ import {
   Alert,
   Box,
   Button,
-  Typography
+  Grid
 } from '@mui/material';
 import TextField from 'components/TextField';
 import { profileAPI } from 'store/api/profile';
@@ -25,8 +24,19 @@ const Header = styled('span')(({ theme }) => ({
   textTransform: 'uppercase',
   borderBottom: `2px solid ${theme.palette.primary.main}`,
   margin: '32px 0',
-  fontSize: '22px'
+  fontSize: '22px',
+  [theme.breakpoints.down('lg')]: {
+    borderBottom: 'none',
+    margin: '20px 0',
+    fontSize: '18px',
+  }
 }));
+
+const Form = styled(FormikForm)(({ theme }) => ({
+  [theme.breakpoints.down('sm')]: {
+    padding: '0 16px'
+  }
+}))
 
 interface OwnProps {
   setIsEditMode: (boolean) => void;
@@ -35,7 +45,7 @@ interface OwnProps {
 const ProfileEditor = ({ setIsEditMode }: OwnProps) => {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-  
+
   const profile = useSelector(profileSelector);
   const initialValues = formInitialValues(profile);
 
@@ -96,7 +106,7 @@ const ProfileEditor = ({ setIsEditMode }: OwnProps) => {
           </Header>
           <Box sx={{
             display: 'flex',
-            flexDirection: 'column', 
+            flexDirection: 'column',
           }}>
             {errors.submit && (
               <Box mb={2}>
@@ -105,103 +115,101 @@ const ProfileEditor = ({ setIsEditMode }: OwnProps) => {
                 </Alert>
               </Box>
             )}
-            <Box sx={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'space-between',
-              '& > *:nth-of-type(even)': {
-                flexBasis: '74%'
-              },
-              '& > *:nth-of-type(odd)': {
-                flexBasis: '22%'
-              }
-            }} >
-              {fields.map(({ type, name, label }) => (
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Field name={name} key={name} >
-                    {({ field, meta: { error, touched } }) => (
-                      <>
-                        {type === 'text'
-                          && <TextField
-                            {...field}
-                            label={label}
-                            error={Boolean(touched && error)}
-                            helperText={touched && error}
-                            margin="normal"
-                          />}
-                        {type === 'checkbox'
-                          && <Checkbox
-                            {...field}
-                            label={label}
-                            name={name}
-                            error={Boolean(touched && error)}
-                            helperText={touched && error}
-                            margin="normal"
-                            checked={values.lookingForAJob}
-                          />}
-                      </>
-                    )}
-                  </Field>
-                </Box>
-              ))}
-            </Box>
-            <Header sx={{ borderBottom: 'none'}}>
+            <Grid container spacing={2}>
+              {fields.map(({ type, name, label }, index) => {
+                const isIndexOdd = index % 2;
+                return (
+                  <Grid
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center'
+                    }}
+                    item
+                    xl={isIndexOdd ? 9 : 3}
+                    lg={6}
+                    md={6}
+                    sm={12}
+                    xs={12}
+                  >
+                    <Field name={name} key={name}>
+                      {({ field, meta: { error, touched } }) => (
+                        <>
+                          {type === 'text'
+                            && <TextField
+                              {...field}
+                              label={label}
+                              error={Boolean(touched && error)}
+                              helperText={touched && error}
+                              margin="normal"
+                            />}
+                          {type === 'checkbox'
+                            && <Checkbox
+                              {...field}
+                              label={label}
+                              name={name}
+                              error={Boolean(touched && error)}
+                              helperText={touched && error}
+                              margin="normal"
+                              xs={{ my: 'auto' }}
+                              checked={values.lookingForAJob}
+                            />}
+                        </>
+                      )}
+                    </Field>
+                  </Grid>
+                )
+              })}
+            </Grid>
+            <Header sx={{ borderBottom: 'none' }}>
               Контакты:
             </Header>
-            <Box sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              '& > *': {
-                flexBasis: '22%'
-              }
-            }}>
+            <Grid container spacing={2}>
               {contacts.map(({ label, name }) => (
-                <Field name={name}>
-                  {({ field, meta: { error, touched } }) => (
-                    <TextField
-                      {...field}
-                      label={label}
-                      error={Boolean(touched && error)}
-                      helperText={touched && error}
-                      margin="normal"
-                    />
-                  )}
-                </Field>
+                <Grid item xl={3} lg={6} md={6} sm={12} xs={12}>
+                  <Field name={name}>
+                    {({ field, meta: { error, touched } }) => (
+                      <TextField
+                        {...field}
+                        label={label}
+                        error={Boolean(touched && error)}
+                        helperText={touched && error}
+                        margin="normal"
+                      />
+                    )}
+                  </Field>
+                </Grid>
               ))}
-            </Box>
-            <Box
-              sx={{
-                display: 'flex',
-                pt: 7,
-                '& > button': {
-                  width: '300px'
-                },
-                '& > button:nth-of-type(1)': {
-                  mr: '58px'
-                }
-              }} 
-              mt={2}
+            </Grid>
+            <Grid 
+              py={4}
+              container 
+              spacing={2}
             >
-              <Button
-                color="primary"
-                disabled={isSubmitting}
-                size="large"
-                type="submit"
-                variant="contained"
-              >
-                Обновить данные профиля
-              </Button>
-              <Button
-                color="primary"
-                disabled={isSubmitting}
-                size="large"
-                type="reset"
-                variant="outlined"
-              >
-                Сбросить данные формы
-              </Button>
-            </Box>
+              <Grid item xl={3} lg={6} md={6} sm={12} xs={12}>
+                <Button
+                  color="primary"
+                  disabled={isSubmitting}
+                  size="large"
+                  type="submit"
+                  variant="contained"
+                  fullWidth
+                >
+                  Обновить данные
+                </Button>
+              </Grid>
+              <Grid item xl={3} lg={6} md={6} sm={12} xs={12}>
+                <Button
+                  color="primary"
+                  disabled={isSubmitting}
+                  size="large"
+                  type="reset"
+                  variant="outlined"
+                  fullWidth
+                >
+                  Сбросить данные
+                </Button>
+              </Grid>
+            </Grid>
           </Box>
         </Form>
       )}

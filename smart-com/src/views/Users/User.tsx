@@ -92,14 +92,14 @@ const User = ({ id }: OwnProps) => {
   }, [dispatch, enqueueSnackbar, name, userId, id]);
 
   return (
-    <ImageListItem>
+    <ImageListItem sx={{ flexGap: 1 }}>
       <NavLink to={profilePath + userId}>
         <img
           src={`${userPhoto ? userPhoto : '/static/user-photo.png'}?w=248&fit=crop&auto=format`}
           srcSet={`${userPhoto ? userPhoto : '/static/user-photo.png'}?w=248&fit=crop&auto=format&dpr=2 2x`}
           alt={name}
           loading="lazy"
-        style={{ width: '300px', height: '300px' }}
+          style={{ width: '100%' }}
         />
       </NavLink>
       <ImageListItemBar
@@ -117,7 +117,7 @@ const User = ({ id }: OwnProps) => {
             aria-label={`info about ${name}`}
             onClick={followed ? handleUnfollowUser : handleFollowUser}
           >
-            <Typography sx={{ mr: 1, fontSize: 14 }}>
+            <Typography sx={{ mr: 1, fontSize: 12 }}>
               {followed ? 'Отписаться' : 'Подписаться'}
             </Typography>
             {followed ? <PersonRemoveIcon /> : <PersonAddIcon />}

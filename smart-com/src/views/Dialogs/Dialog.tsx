@@ -10,23 +10,18 @@ import { authUserIdSelector } from 'store/selectors/auth';
 import type { Message as TypeMessage } from 'types/chat';
 import { setMessages } from 'store/slices/dialogs';
 import { dialogsAPI } from 'store/api/dialogs';
+import Header from './Header';
 
 const Container = styled(Paper)({
   display: "flex",
   flexGrow: 1,
   flexDirection: "column",
   justifyContent: 'space-between',
-  width: "500px",
   height: "500px",
   boxShadow: 'none'
 });
 
-
-const Dialog = ({
-  userId,
-  //yourPhoto, 
-  //recipientPhoto 
-}) => {
+const Dialog = ({ userId }) => {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const { items: messages, totalCount } = useSelector(messagesSelector);
@@ -75,13 +70,11 @@ const Dialog = ({
     }
   }, [messages])
 
-
   const messagesToRender = useMemo(() => (
     messages?.map(({
       addedAt,
       body,
       id,
-      //recipientId: number
       senderId,
       senderName,
       viewed
@@ -91,7 +84,6 @@ const Dialog = ({
         <Message
           id={id}
           message={body}
-          //photo={'photo'}
           userName={senderName}
           key={id}
           isMyMessage={isMyMessage}
@@ -104,6 +96,10 @@ const Dialog = ({
 
   return (
     <Container onScroll={scrollHandler}>
+      <Header 
+        userName={userId}
+        totalCountMessages={totalCount}
+      />
       <Box sx={{
         display: 'flex',
         flexDirection: 'column',

@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { DataLoadingStates } from 'types/utility';
 import type { Dialog, Messages } from 'types/dialogs';
 import { dialogsAPI } from '../api/dialogs';
-import type { AppThunk } from '../';
 
 export interface DialogsState {
   status: DataLoadingStates;

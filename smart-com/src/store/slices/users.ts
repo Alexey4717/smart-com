@@ -23,7 +23,7 @@ const sliceName = 'users';
 const initialState: UsersState = {
   status: DataLoadingStates.IDLE,
   errors: null,
-  pageSize: 10,
+  pageSize: 12,
   totalUsersCount: 0,
   currentPage: 1,
   users: {

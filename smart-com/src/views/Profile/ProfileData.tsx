@@ -4,15 +4,13 @@ import { useSnackbar } from 'notistack';
 import {
   Typography,
   List,
-  Box,
-  Avatar
+  Box
 } from '@mui/material';
 import TextField from 'components/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import AddIcon from '@mui/icons-material/Add';
 import CircleIcon from '@mui/icons-material/Circle';
-import { styled } from '@mui/material/styles';
 import {
   profileSelector
 } from 'store/selectors/profile';
@@ -20,41 +18,23 @@ import { profileAPI } from 'store/api/profile';
 import type { APIResponseType } from 'store/api';
 import { setStatus, getProfileById } from 'store/slices/profile';
 import Service from './Service';
-
-const ProflieAvatar = styled(Avatar)(({ theme }) => ({
-  width: 300,
-  height: 300,
-  border: `10px solid ${theme.palette.background.default}`
-}));
-
-const AddPhoto = styled('label')(({ theme }) => ({
-  position: 'absolute',
-  right: '10%',
-  top: '10%',
-  paddingBottom: '8px',
-  backgroundColor: '#fff',
-  minWidth: '45px',
-  minHeight: '45px',
-  width: '45px',
-  height: '45px',
-  borderRadius: '50%',
-  border: `3px solid ${theme.palette.background.default}`,
-  padding: '8px 8px 6px 6px',
-  cursor: 'pointer',
-  '&:hover': {
-    backgroundColor: 'gray'
-  }
-}));
-
-const LookingForAJobItem = styled(Box)({
-  display: 'inline-flex',
-  alugnItems: 'center',
-  fontWeight: 'bold',
-  '& > svg': {
-    width: '15px',
-    marginRight: 5
-  }
-})
+import {
+  Container,
+  Heading,
+  AvatarContainer,
+  ProfileAvatar,
+  AddPhoto,
+  FullName,
+  ProfileItems,
+  MainInfo,
+  StatusWrapper,
+  SocialsHeading,
+  FormHeading,
+  FormItems,
+  FormTitle,
+  FormItem,
+  LookingForAJobItem
+} from './styles';
 
 interface OwnProps {
   isAuthUser: boolean;
@@ -84,8 +64,6 @@ const ProfileData = ({ isAuthUser }: OwnProps) => {
       setEditStatusMode(opened => !opened);
     }
   }, [setEditStatusMode]);
-
-  console.log('isAuthUser', isAuthUser)
 
   const uploadPhoto = useCallback(async (photoFile: File) => {
     try {
@@ -169,63 +147,29 @@ const ProfileData = ({ isAuthUser }: OwnProps) => {
   ), [isAuthUser, userStatus]);
 
   return (
-    <Box sx={{
-      display: 'flex',
-      flexDirection: 'column'
-    }}>
-      <Box sx={{
-        display: 'flex',
-        alignItems: 'flex-end',
-        '& > *:nth-last-of-type': {
-          flexGrow: 1
-        }
-      }}>
-        <Box sx={{
-          display: 'inline-block',
-          position: 'relative',
-          zIndex: 1,
-          mb: '-150px',
-          ml: 5
-        }}>
-          <ProflieAvatar
+    <Container>
+      <Heading>
+        <AvatarContainer>
+          <ProfileAvatar
             alt="profile-avatar"
             src={photos.large}
           />
           {isAuthUser && (
             <Tooltip title="Нажмите для загрузки 1 фотографии">
               <AddPhoto onChange={handleUploadPhoto}>
-                <AddAPhotoIcon />
+                <AddAPhotoIcon color="secondary" />
                 <input type="file" hidden />
               </AddPhoto>
             </Tooltip>
           )}
-        </Box>
-        <Typography
-          sx={{
-            fontSize: '60px',
-            ml: 5
-          }}
-          variant='h3'
-        >
+        </AvatarContainer>
+        <FullName variant='h3'>
           {fullName}
-        </Typography>
-      </Box>
-      <Box sx={{
-        display: 'flex',
-        backgroundColor: '#fff',
-        p: 2,
-        borderRadius: 2,
-      }}>
-        <Box sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          flexBasis: '40%'
-        }}>
-          <Typography
-            sx={{ display: 'inline-block', fontSize: '30px', pr: 5, pl: 45 }}
-            onDoubleClick={toggleEditStatusMode}
-          >
+        </FullName>
+      </Heading>
+      <ProfileItems>
+        <MainInfo>
+          <StatusWrapper onDoubleClick={toggleEditStatusMode}>
             Статус:
             <br />
             {
@@ -253,72 +197,65 @@ const ProfileData = ({ isAuthUser }: OwnProps) => {
                   </Typography>
                 </Tooltip>
             }
-          </Typography>
+          </StatusWrapper>
           <Box>
-            {Boolean(servicesLinks.length)
-              && <Typography sx={{ pb: 2 }} component='p'>
+            {
+              Boolean(servicesLinks.length)
+              && <SocialsHeading>
                 Соцсети:
-              </Typography>}
+              </SocialsHeading>
+            }
             <List
-              sx={{ display: 'flex' }}
+              sx={{ display: 'flex', flexWrap: 'wrap' }}
               component="div"
               disablePadding
             >
               {servicesLinks}
             </List>
           </Box>
-
-        </Box>
+        </MainInfo>
         <Box sx={{
           display: 'flex',
           flexDirection: 'column',
           flexBasis: '60%'
         }}>
-          <Typography sx={{ fontSize: '30px' }}>
+          <FormHeading>
             Анкета пользователя:
-          </Typography>
-          <Box sx={{
-            display: 'flex',
-            alignItems: 'center',
-            pt: 3
-          }}>
-            <Typography
-              sx={{ textDecoration: 'underline', flexBasis: '25%' }}
-              component="span"
-            >
+          </FormHeading>
+          <FormItems>
+            <FormTitle>
               Статус соискателя:
-            </Typography>
-            <Box sx={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              flexBasis: '75%'
-            }}>
-              {
-                lookingForAJob
-                  ? <LookingForAJobItem sx={{ color: 'green' }}>
-                    <CircleIcon />
-                    нахожусь в поиске работы
-                  </LookingForAJobItem>
-                  : <LookingForAJobItem sx={{ color: '#ff3d00' }}>
-                    <CircleIcon />
-                    не ищу работу
-                  </LookingForAJobItem>
-              }
-            </Box>
-          </Box>
-          <Box sx={{ display: 'flex', pt: 3 }}>
-            <Typography sx={{ textDecoration: 'underline', flexBasis: '25%' }}>
+            </FormTitle>
+            <FormItem>
+              <LookingForAJobItem
+                sx={{
+                  color: lookingForAJob ? 'green' : '#ff3d00'
+                }}
+              >
+                <CircleIcon />
+                {lookingForAJob ? 'нахожусь в поиске работы' : 'не ищу работу'}
+              </LookingForAJobItem>
+            </FormItem>
+          </FormItems>
+          <FormItems>
+            <FormTitle>
               Данные анкеты:
-            </Typography>
-            <Box sx={{ flexBasis: '75%' }}>{lookingForAJobDescription}</Box>
-          </Box>
-          <Box sx={{ display: 'flex', pt: 3 }}>
-            <Typography sx={{ textDecoration: 'underline', flexBasis: '25%' }}>Обо мне:</Typography>
-            <Box sx={{ flexBasis: '75%' }}>{aboutMe}</Box>
-          </Box>
+            </FormTitle>
+            <FormItem>
+              {lookingForAJobDescription}
+            </FormItem>
+          </FormItems>
+          <FormItems>
+            <FormTitle>
+              Обо мне:
+            </FormTitle>
+            <FormItem>
+              {aboutMe}
+            </FormItem>
+          </FormItems>
         </Box>
-      </Box>
-    </Box>
+      </ProfileItems>
+    </Container>
   )
 };
 

@@ -16,9 +16,14 @@ export const Wrapper = styled(Page)(({ theme }) => ({
   }
 }));
 
-export const CentralPanel = styled(Page)(() => ({
+export const CentralPanel = styled(Page)(({ theme }) => ({
   display: 'flex',
   flex: '1 1 calc(100% - 500px)',
   height: '100%',
   overflow: 'auto',
+  [theme.breakpoints.down('md')]: {
+    flexBasis: '100%',
+    marginBottom: 103,
+    '&::-webkit-scrollbar': { width: 0 }
+  }
 }));

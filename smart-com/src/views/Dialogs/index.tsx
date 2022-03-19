@@ -1,6 +1,5 @@
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import View from 'components/View';
 import {
@@ -8,9 +7,6 @@ import {
   Box,
   Typography
 } from '@mui/material';
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import Button from '@mui/material/Button';
 import { useTheme } from '@mui/system';
 import {
   errorsSelector,
@@ -20,17 +16,15 @@ import {
 import { DataLoadingStates } from 'types/utility';
 import Loader from 'components/Loader';
 import { getAllDialogs } from 'store/slices/dialogs';
-import { usersAPI } from 'store/api/users';
+import useIdFromHistory from 'hooks/useIdFromHistory';
+import useMediaQuery from 'hooks/useMediaQuery';
 import Followers from './Followers';
 import Dialog from './Dialog';
-import useIdFromHistory from 'hooks/useIdFromHistory';
 
 const { LOADING, ERROR } = DataLoadingStates;
 
 const Dialogs = () => {
 
-  const { palette } = useTheme();
-  const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
 
   const { isUriId, uriId } = useIdFromHistory();
@@ -40,6 +34,8 @@ const Dialogs = () => {
   const dialogs = useSelector(dialogsSelector);
 
   const isLoading = loadingStatus === LOADING;
+
+  const isSm = useMediaQuery('(min-width: 600px)');
 
   useEffect(() => {
     dispatch(getAllDialogs());
@@ -61,27 +57,40 @@ const Dialogs = () => {
       pageSubTitle={subTitle}
     >
       {isLoading ? <Loader /> : dialogs && (
-        <Box 
-          sx={{ 
-            display: 'flex', 
-            height: '500px', 
-            overflow: 'hidden'
+        <Box
+          sx={{
+            display: 'flex',
+            height: '500px',
+            overflow: 'hidden',
           }}
         >
-          <Followers dialogs={dialogs} />
-          {
-            isUriId
-              ? <Dialog
-                userId={uriId}
-              //yourPhoto={dialogs.photos.small} 
-              //recipientPhoto={dialogs.photos.small} 
-              />
-              : <Typography
-                sx={{ m: 'auto' }}
-              >
-                Для вывода сообщений нажмите на соответствующий диалог
-              </Typography>
-          }
+
+          <Followers 
+            isUriId={isUriId}
+            isSm={isSm}
+            dialogs={dialogs} 
+          />
+          <Box
+            sx={{
+              display: !isSm && !isUriId && 'none',
+              flexBasis: isSm ? 'calc(100% - 400px)' : '100%'
+            }}
+          >
+            {
+              isUriId
+                ? <Dialog
+                  userId={uriId}
+                />
+                : <Typography
+                  sx={{
+                    display: !isSm && 'none',
+                    m: 'auto'
+                  }}
+                >
+                  Для вывода сообщений нажмите на соответствующий диалог
+                </Typography>
+            }
+          </Box>
         </Box>
       )}
       {(loadingStatus === ERROR) && (

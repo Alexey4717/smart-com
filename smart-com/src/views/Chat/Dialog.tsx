@@ -8,14 +8,18 @@ import { messagesSelector } from 'store/selectors/chat';
 import { authUserIdSelector } from 'store/selectors/auth';
 import type { Message as TypeMessage } from 'types/chat'
 
-const Container = styled(Paper)({
+const Container = styled(Paper)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   justifyContent: 'space-between',
   width: "500px",
   height: "500px",
-  boxShadow: 'none'
-});
+  boxShadow: 'none',
+  [theme.breakpoints.down('md')]: {
+    width: '100%',
+    height: 'calc(100vh - 300px)'
+  },
+}));
 
 
 const Dialog = () => {

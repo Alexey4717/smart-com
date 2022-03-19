@@ -14,7 +14,7 @@ import { StatusLoadingWs } from 'types/utility';
 import Loader from 'components/Loader';
 import { getProfileById } from 'store/slices/profile';
 import { authUserIdSelector } from 'store/selectors/auth';
-import { 
+import {
   startMessagesListening,
   stopMessagesListening,
   resetMessages
@@ -26,7 +26,7 @@ const { PENDING, ERROR } = StatusLoadingWs;
 const Chat = () => {
 
   const dispatch = useDispatch();
-  
+
   const errors = useSelector(errorsSelector);
   const loadingStatus = useSelector(statusSelector);
   const isPending = loadingStatus === PENDING;
@@ -60,10 +60,11 @@ const Chat = () => {
       pageSubTitle={subTitle}
     >
       {isPending ? <Loader /> : (
-        <Box sx={{
-          display: 'flex',
-          justifyContent: 'center'
-        }}>
+        <Box
+          sx={{
+            display: 'flex'
+          }}
+        >
           <Dialog />
         </Box>
       )}

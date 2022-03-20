@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 const useMediaQuery = (query: string): boolean => {
 
-  const [matches, setMatches] = useState(false);
+  const [matches, setMatches] = useState<boolean>(false);
   const queryString = query.replace('@media ', '');
 
   useEffect(() => {

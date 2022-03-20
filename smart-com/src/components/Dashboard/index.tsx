@@ -1,14 +1,11 @@
 import {
   useState,
-  useCallback,
-  useMemo
+  useCallback
 } from 'react';
 import type { FC, ReactNode } from 'react';
-import { useTheme } from '@mui/system';
 import { useHistory } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import useAuth from 'hooks/useAuth';
-import useElementWidth from 'hooks/useElementWidth';
 import {
   DashboardLayout,
   Wrapper,
@@ -23,7 +20,6 @@ interface DashboardLayoutProps {
 };
 
 const Dashboard: FC<DashboardLayoutProps> = ({ children }) => {
-  const { breakpoints } = useTheme();
   const history = useHistory();
   const { logout } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
@@ -46,18 +42,8 @@ const Dashboard: FC<DashboardLayoutProps> = ({ children }) => {
     }
   }, [logout, history, enqueueSnackbar]);
 
-  const [ref, width] = useElementWidth();
-
-  const isMoreLg = useMemo(() => (
-    width > breakpoints.values.lg
-  ), [width]);
-
-  const isLessSm = useMemo(() => (
-    width < breakpoints.values.sm
-  ), [width]);
-
   return (
-    <DashboardLayout ref={ref}>
+    <DashboardLayout>
       <TopBar
         onLogoutClick={handleLogout}
       />
@@ -65,8 +51,6 @@ const Dashboard: FC<DashboardLayoutProps> = ({ children }) => {
         <LeftBar
           onMobileClose={handleMobileClose}
           openMobile={isMobileNavOpen}
-          isMoreLg={isMoreLg}
-          isLessSm={isLessSm}
         />
         <CentralPanel>
 

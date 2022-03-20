@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import type { FC, ReactElement } from 'react';
 import { useLocation } from 'react-router-dom';
 import CssBaseline from '@mui/material/CssBaseline';
+import useMediaQuery from 'hooks/useMediaQuery';
 import NavItem from './NavItem';
 import sections from './sections';
 import type { Section, NavBarProps } from './types';
@@ -29,10 +30,11 @@ function renderSections(navSections: Section[]): ReactElement[] {
 
 const NavBar: FC<NavBarProps> = ({
   onMobileClose,
-  openMobile,
-  isMoreLg,
-  isLessSm
+  openMobile
 }) => {
+
+  const isMoreThanLg = useMediaQuery('(min-width: 1200px)');
+  const isLessThanSm = useMediaQuery('(max-width: 600px)');
 
   const location = useLocation();
   
@@ -51,14 +53,14 @@ const NavBar: FC<NavBarProps> = ({
     <Container>
       <CssBaseline />
       <AppBar
-        isLessSm={isLessSm}
+        isLessSm={isLessThanSm}
         position="fixed"
-        open={isMoreLg || isLessSm}
+        open={isMoreThanLg || isLessThanSm}
       />
       <Drawer
-        anchor={isLessSm ? "top" : "left"}
+        anchor={isLessThanSm ? "top" : "left"}
         variant="permanent"
-        open={isMoreLg || isLessSm}
+        open={isMoreThanLg || isLessThanSm}
       >
         <NavList>
           {sectionsList}

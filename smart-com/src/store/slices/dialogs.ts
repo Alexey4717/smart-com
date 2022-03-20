@@ -52,6 +52,9 @@ const slice = createSlice({
       state.messages.items = items;
       state.messages.totalCount = totalCount;
     },
+    setTotalCount(state: DialogsState, action) {
+      state.messages.totalCount = action.payload;
+    },
     setMessage(state: DialogsState, action) {
       const {
         id,
@@ -74,9 +77,6 @@ const slice = createSlice({
         recipientId,
         viewed
       });
-    },
-    setIsMessageViewed(state: DialogsState, action) {
-
     },
     setSpamMessages(state: DialogsState, action) {
       state.spamMessages = action.payload;
@@ -108,7 +108,7 @@ export const {
   setDialog,
   setMessages,
   setMessage,
-  setIsMessageViewed,
+  setTotalCount,
   setSpamMessages,
   setDeletedMessages,
   setNewMessagesCount

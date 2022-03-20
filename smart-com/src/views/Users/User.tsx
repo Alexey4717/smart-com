@@ -8,12 +8,20 @@ import {
   ImageListItem,
   ImageListItemBar
 } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import { getUserByIdSelector } from 'store/selectors/users';
 import { followUser, unfollowUser } from 'store/slices/users';
 import { usersAPI } from 'store/api/users';
 import paths from 'routing/paths';
+
+const Container = styled(ImageListItem)(({ theme }) => ({
+  flexGap: 1,
+  [theme.breakpoints.down('sm')]: {
+    margin: '0 10px'
+  }
+}))
 
 const profilePath = paths.profile;
 interface OwnProps {
@@ -92,7 +100,7 @@ const User = ({ id }: OwnProps) => {
   }, [dispatch, enqueueSnackbar, name, userId, id]);
 
   return (
-    <ImageListItem sx={{ flexGap: 1 }}>
+    <Container sx={{ flexGap: 1 }}>
       <NavLink to={profilePath + userId}>
         <img
           src={`${userPhoto ? userPhoto : '/static/user-photo.png'}?w=248&fit=crop&auto=format`}
@@ -124,7 +132,7 @@ const User = ({ id }: OwnProps) => {
           </Button>
         }
       />
-    </ImageListItem>
+    </Container>
   );
 };
 

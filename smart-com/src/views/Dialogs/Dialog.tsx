@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { useSnackbar } from 'notistack';
-import { Paper, Box, Typography } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Box, Typography } from '@mui/material';
 import TextInput from "./TextInput";
 import Message from "components/Message";
 import { messagesSelector } from 'store/selectors/dialogs';
@@ -11,15 +10,7 @@ import type { Message as TypeMessage } from 'types/chat';
 import { setMessages } from 'store/slices/dialogs';
 import { dialogsAPI } from 'store/api/dialogs';
 import Header from './Header';
-
-const Container = styled(Paper)({
-  display: "flex",
-  flexGrow: 1,
-  flexDirection: "column",
-  justifyContent: 'space-between',
-  height: "500px",
-  boxShadow: 'none'
-});
+import { DialogContainer } from './styles';
 
 const Dialog = ({ userId }) => {
   const dispatch = useDispatch();
@@ -66,7 +57,7 @@ const Dialog = ({ userId }) => {
 
   useEffect(() => {
     if (isAutoScroll) {
-      messagesAnchorRef.current?.scrollIntoView({ behavior: 'smooth' })
+      messagesAnchorRef.current?.scrollIntoView()
     }
   }, [messages])
 
@@ -95,8 +86,8 @@ const Dialog = ({ userId }) => {
   ), [messages?.length]);
 
   return (
-    <Container onScroll={scrollHandler}>
-      <Header 
+    <DialogContainer onScroll={scrollHandler}>
+      <Header
         userName={userId}
         totalCountMessages={totalCount}
       />
@@ -113,12 +104,14 @@ const Dialog = ({ userId }) => {
         {
           messages?.length
             ? messagesToRender
-            : <Typography sx={{ m: 'auto' }}>Нет сообщений</Typography>
+            : <Typography sx={{ m: 'auto' }}>
+              Нет сообщений
+            </Typography>
         }
-        <div ref={messagesAnchorRef}></div>
+        <div ref={messagesAnchorRef} />
       </Box>
       <TextInput userId={userId} />
-    </Container>
+    </DialogContainer>
   );
 };
 

@@ -1,13 +1,11 @@
 import { useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useSnackbar } from 'notistack';
 import View from 'components/View';
 import {
   Alert,
   Box,
   Typography
 } from '@mui/material';
-import { useTheme } from '@mui/system';
 import {
   errorsSelector,
   statusSelector,
@@ -20,6 +18,7 @@ import useIdFromHistory from 'hooks/useIdFromHistory';
 import useMediaQuery from 'hooks/useMediaQuery';
 import Followers from './Followers';
 import Dialog from './Dialog';
+import { DialogsContainer } from './styles';
 
 const { LOADING, ERROR } = DataLoadingStates;
 
@@ -35,7 +34,7 @@ const Dialogs = () => {
 
   const isLoading = loadingStatus === LOADING;
 
-  const isSm = useMediaQuery('(min-width: 600px)');
+  const isMd = useMediaQuery('(min-width: 900px)');
 
   useEffect(() => {
     dispatch(getAllDialogs());
@@ -57,23 +56,16 @@ const Dialogs = () => {
       pageSubTitle={subTitle}
     >
       {isLoading ? <Loader /> : dialogs && (
-        <Box
-          sx={{
-            display: 'flex',
-            height: '500px',
-            overflow: 'hidden',
-          }}
-        >
-
-          <Followers 
+        <DialogsContainer>
+          <Followers
             isUriId={isUriId}
-            isSm={isSm}
-            dialogs={dialogs} 
+            isMd={isMd}
+            dialogs={dialogs}
           />
           <Box
             sx={{
-              display: !isSm && !isUriId && 'none',
-              flexBasis: isSm ? 'calc(100% - 400px)' : '100%'
+              display: !isMd && !isUriId ? 'none' : 'flex',
+              flexBasis: isMd ? 'calc(100% - 400px)' : '100%',
             }}
           >
             {
@@ -83,7 +75,7 @@ const Dialogs = () => {
                 />
                 : <Typography
                   sx={{
-                    display: !isSm && 'none',
+                    display: isMd ? 'block' : 'none',
                     m: 'auto'
                   }}
                 >
@@ -91,7 +83,7 @@ const Dialogs = () => {
                 </Typography>
             }
           </Box>
-        </Box>
+        </DialogsContainer>
       )}
       {(loadingStatus === ERROR) && (
         <Alert severity="error">

@@ -9,39 +9,32 @@ import {
   Field
 } from 'formik';
 import TextField from 'components/TextField';
-import { setMessage } from 'store/slices/dialogs';
-import { statusSelector } from 'store/selectors/chat';
+import { setMessage, setTotalCount } from 'store/slices/dialogs';
+import { totalCountSelector } from 'store/selectors/dialogs';
 import { dialogsAPI } from 'store/api/dialogs';
 import {
   string as yupString,
   object as yupObject
 } from 'yup';
+import { InputContainer } from './styles';
 
-export const validationSchema = yupObject().shape({
+const validationSchema = yupObject().shape({
   message: yupString().max(255),
 });
 
-export const initialValues = {
+const initialValues = {
   message: '',
   submit: null,
 };
 
-const Container = styled('div')({
-  display: "flex",
-  justifyContent: "center",
-  width: "100%",
-  borderRadius: '0 0 5px 5px',
-  padding: 15,
-  backgroundColor: '#bfbaba'
-});
-
 interface OwnProps {
   userId: number
-}
+};
 
 const TextInput = ({ userId }: OwnProps) => {
 
   const dispatch = useDispatch();
+  const totalCount = useSelector(totalCountSelector);
 
   const handleSubmit = useCallback(async (values, {
     setErrors,
@@ -58,6 +51,7 @@ const TextInput = ({ userId }: OwnProps) => {
 
       if (resultCode === 0) {
         dispatch(setMessage(message));
+        dispatch(setTotalCount(totalCount + 1));
         setStatus({ success: true });
         setSubmitting(false);
       } else if (fieldsErrors.length) {
@@ -72,7 +66,7 @@ const TextInput = ({ userId }: OwnProps) => {
       setSubmitting(false);
     }
     resetForm();
-  }, [dispatch]);
+  }, [dispatch, totalCount]);
 
   return (
     <Formik
@@ -92,7 +86,7 @@ const TextInput = ({ userId }: OwnProps) => {
               </Alert>
             </Box>
           )}
-          <Container>
+          <InputContainer>
             <Field name="message">
               {({ field, meta: { error, touched } }) => (
                 <TextField
@@ -112,7 +106,7 @@ const TextInput = ({ userId }: OwnProps) => {
             >
               <SendIcon />
             </Button>
-          </Container>
+          </InputContainer>
         </Form>
       )
       }

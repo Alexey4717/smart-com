@@ -107,7 +107,8 @@ const Profile = () => {
             sx={{
               display: 'flex',
               mx: 'auto',
-              mb: 2
+              mb: 2,
+              mt: 1
             }}
             variant="text"
             onClick={toggleEditMode}

@@ -27,25 +27,25 @@ interface OwnProps {
     handleChange: (event: React.ChangeEvent<unknown>, value: number) => void;
   },
   isLoading?: boolean;
-}
+};
 
 const ViewContainer = styled(Page)(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
   minHeight: '100%',
   width: '100%',
-  paddingTop: theme.spacing(3),
-  paddingBottom: theme.spacing(3),
+  padding: '24px 0',
   [theme.breakpoints.down('md')]: {
     width: '100%',
     '&::-webkit-scrollbar': { width: 0 }
   },
   [theme.breakpoints.down('sm')]: {
-    paddingTop: theme.spacing(7),
+    padding: '36px 0 0 0'
   },
 }));
 
 const Wrapper = styled(Container)(({ theme }) => ({
   [theme.breakpoints.down('sm')]: {
+    height: '100%',
     padding: 0
   }
 }));
@@ -67,7 +67,7 @@ const SearchWrapper = styled(Box)(({ theme }) => ({
       display: 'flex',
       justifyContent: 'center',
       width: '100%',
-      padding: '0 10px 0 35px'
+      padding: '20px 10px 0 35px'
     }
   }
 }));
@@ -99,7 +99,7 @@ const View: FC<OwnProps> = ({
   return (
     <ViewContainer title={pageTitle}>
       <Wrapper sx={{px: 0}} maxWidth={false}>
-        <Grid container spacing={3} alignItems="baseline">
+        <Grid container alignItems="baseline">
           <Grid item xs>
             {pageTitle && (
               <Title variant="h3" color="textPrimary">
@@ -138,7 +138,7 @@ const View: FC<OwnProps> = ({
             />
           </Box>
         )}
-        <Box mt={3}>{children}</Box>
+        <Box height='100%'>{children}</Box>
       </Wrapper>
     </ViewContainer>
   );

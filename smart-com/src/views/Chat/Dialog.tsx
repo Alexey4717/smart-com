@@ -1,26 +1,11 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useSelector } from 'react-redux';
-import { Paper, Box } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import TextInput from "./TextInput";
 import Message from "components/Message";
 import { messagesSelector } from 'store/selectors/chat';
 import { authUserIdSelector } from 'store/selectors/auth';
 import type { Message as TypeMessage } from 'types/chat'
-
-const Container = styled(Paper)(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: 'space-between',
-  width: "500px",
-  height: "500px",
-  boxShadow: 'none',
-  [theme.breakpoints.down('md')]: {
-    width: '100%',
-    height: 'calc(100vh - 300px)'
-  },
-}));
-
+import { Container, Heading, Messages } from './styles';
 
 const Dialog = () => {
   const messages: TypeMessage[] = useSelector(messagesSelector);
@@ -69,19 +54,13 @@ const Dialog = () => {
 
   return (
     <Container onScroll={scrollHandler}>
-      <Box sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        px: 2,
-        height: '100%',
-        overflowY: 'scroll',
-        '&::-webkit-scrollbar-thumb': {
-          border: `5px solid white`
-        }
-      }}>
+      <Heading>
+        Общий чат
+      </Heading>
+      <Messages>
         {messagesToRender}
         <div ref={messagesAnchorRef}></div>
-      </Box>
+      </Messages>
       <TextInput />
     </Container>
   );

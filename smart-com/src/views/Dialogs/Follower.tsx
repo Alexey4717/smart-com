@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useTheme } from '@mui/system';
-import { styled } from '@mui/material/styles';
 import {
   Box,
   Typography,
@@ -10,27 +9,7 @@ import {
 } from '@mui/material';
 import { dateConverter } from 'utils/dateConverter';
 import useIdFromHistory from 'hooks/useIdFromHistory';
-
-interface StyledProps {
-  hasNewMessages: boolean;
-  isActive: boolean;
-};
-
-const Container = styled(Box)<StyledProps>(({ theme, hasNewMessages, isActive = false }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  border: `2px solid ${isActive ? theme.palette.primary.main : 'none'}`,
-  borderRadius: 15,
-  padding: 8,
-  cursor: 'pointer',
-  width: '100%',
-  backgroundColor: hasNewMessages ? '#CCFF99' : 'white'
-}));
-
-const ActivityDate = styled(Typography)(({ theme }) => ({
-  fontSize: 12,
-  color: theme.palette.text.secondary
-}));
+import { FollowerContainer, ActivityDate } from './styles';
 
 const Follower = ({ dialog }) => {
   const { palette } = useTheme();
@@ -70,7 +49,7 @@ const Follower = ({ dialog }) => {
         }
       }}
     >
-      <Container
+      <FollowerContainer
         hasNewMessages={hasNewMessages}
         onClick={handleClick}
         isActive={isDialogActive}
@@ -89,7 +68,7 @@ const Follower = ({ dialog }) => {
             Пользователь был активен: {activityDateUser}
           </ActivityDate>
         </Box>
-      </Container>
+      </FollowerContainer>
     </Badge>
   )
 };

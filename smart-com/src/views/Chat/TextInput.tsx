@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { styled } from '@mui/material/styles';
 import { Button, Box, Alert } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import {
@@ -15,24 +14,16 @@ import {
   string as yupString,
   object as yupObject
 } from 'yup';
+import { InputContainer } from './styles';
 
-export const validationSchema = yupObject().shape({
-  message: yupString().max(255).required(),
+const validationSchema = yupObject().shape({
+  message: yupString().max(255),
 });
 
-export const initialValues = {
+const initialValues = {
   message: '',
   submit: null,
 };
-
-const Container = styled('div')({
-  display: "flex",
-  justifyContent: "center",
-  width: "100%",
-  borderRadius: '0 0 5px 5px',
-  padding: 15,
-  backgroundColor: '#bfbaba'
-});
 
 const TextInput = () => {
 
@@ -75,7 +66,7 @@ const TextInput = () => {
               </Alert>
             </Box>
           )}
-          <Container>
+          <InputContainer>
             <Field name="message">
               {({ field, meta: { error, touched } }) => (
                 <TextField
@@ -95,10 +86,9 @@ const TextInput = () => {
             >
               <SendIcon />
             </Button>
-          </Container>
+          </InputContainer>
         </Form>
-      )
-      }
+      )}
     </Formik >
   )
 };

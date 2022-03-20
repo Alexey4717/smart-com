@@ -4,7 +4,7 @@ import Follower from './Follower';
 import { FollowersContainer } from './styles';
 
 interface OwnProps {
-  dialogs: Dialog[];
+  dialogs: string[];
   isMd: boolean;
   isUriId: boolean;
 };
@@ -12,8 +12,8 @@ interface OwnProps {
 const Followers = ({ dialogs, isMd, isUriId }: OwnProps) => {
 
   const dialogsToRender = useMemo(() => (
-    dialogs?.map((dialog) => (
-      <Follower dialog={dialog} key={dialog.id} />
+    dialogs?.map((dialogId) => (
+      <Follower dialogId={dialogId} key={dialogId} />
     ))
   ), [dialogs?.length]);
 

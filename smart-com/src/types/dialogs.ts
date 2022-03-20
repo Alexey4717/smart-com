@@ -1,3 +1,5 @@
+import type { EntityById, EntitiesById } from './common';
+
 export type Dialog = {
   id: number;
   userName: string;
@@ -11,6 +13,9 @@ export type Dialog = {
   }
 };
 
+export type DialogById<T = {}> = EntityById<Dialog, T>;
+export type DialogsById = EntitiesById<DialogById>;
+
 export type Message = {
   addedAt: string
   body: string
@@ -22,7 +27,5 @@ export type Message = {
   viewed: boolean
 };
 
-export type Messages = {
-  items: Message[];
-  totalCount: number;
-};
+export type MessageById<T = {}> = EntityById<Message, T>;
+export type MessagesById = EntitiesById<MessageById>;

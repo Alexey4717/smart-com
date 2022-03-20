@@ -9,7 +9,7 @@ import {
 import {
   errorsSelector,
   statusSelector,
-  dialogsSelector
+  dialogsIdsSelector
 } from 'store/selectors/dialogs';
 import { DataLoadingStates } from 'types/utility';
 import Loader from 'components/Loader';
@@ -30,7 +30,7 @@ const Dialogs = () => {
 
   const errors = useSelector(errorsSelector);
   const loadingStatus = useSelector(statusSelector);
-  const dialogs = useSelector(dialogsSelector);
+  const dialogs = useSelector(dialogsIdsSelector);
 
   const isLoading = loadingStatus === LOADING;
 

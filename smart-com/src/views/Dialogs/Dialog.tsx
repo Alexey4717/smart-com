@@ -3,11 +3,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import { Box, Typography } from '@mui/material';
 import TextInput from "./TextInput";
-import Message from "components/Message";
-import { messagesSelector } from 'store/selectors/dialogs';
-import { authUserIdSelector } from 'store/selectors/auth';
-import type { Message as TypeMessage } from 'types/chat';
-import { setMessages } from 'store/slices/dialogs';
+import Message from "./Message";
+import { 
+  messagesIdsSelector, 
+  totalCountSelector 
+} from 'store/selectors/dialogs';
+import { setMessages, setTotalCount } from 'store/slices/dialogs';
 import { dialogsAPI } from 'store/api/dialogs';
 import Header from './Header';
 import { DialogContainer } from './styles';
@@ -15,9 +16,8 @@ import { DialogContainer } from './styles';
 const Dialog = ({ userId }) => {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-  const { items: messages, totalCount } = useSelector(messagesSelector);
-
-  const authUserId = useSelector(authUserIdSelector);
+  const messages = useSelector(messagesIdsSelector);
+  const totalCount = useSelector(totalCountSelector);
 
   const [isAutoScroll, setIsAutoScroll] = useState(true);
 
@@ -38,7 +38,8 @@ const Dialog = ({ userId }) => {
         const { items, totalCount, error } = await dialogsAPI.getMessages(userId);
 
         if (items && totalCount !== undefined) {
-          dispatch(setMessages({ items, totalCount }));
+          dispatch(setMessages({ items }));
+          dispatch(setTotalCount(totalCount))
         } else if (error) {
           throw new Error(error);
         } else {
@@ -62,25 +63,9 @@ const Dialog = ({ userId }) => {
   }, [messages])
 
   const messagesToRender = useMemo(() => (
-    messages?.map(({
-      addedAt,
-      body,
-      id,
-      senderId,
-      senderName,
-      viewed
-    }) => {
-      const isMyMessage = authUserId === senderId;
+    messages?.map((messageId) => {
       return (
-        <Message
-          id={id}
-          message={body}
-          userName={senderName}
-          key={id}
-          isMyMessage={isMyMessage}
-          viewed={viewed}
-          addedDate={addedAt}
-        />
+        <Message messageId={messageId} />
       )
     })
   ), [messages?.length]);

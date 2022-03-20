@@ -1,6 +1,6 @@
 import type { UsersById, UserType } from 'types/user';
 
-export const mapPlacesToStoreEntities = (
+export const mapUsersToStoreEntities = (
   usersArray: UserType[]
 ) => {
   const hasUsersArrayLength = Boolean(usersArray.length);

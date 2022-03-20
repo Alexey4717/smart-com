@@ -29,7 +29,7 @@ const Follower = ({ id, name, photo }) => {
       } = await dialogsAPI.startDialog(id);
 
       if (resultCode === 0) {
-        dispatch(setDialog);
+        dispatch(setDialog(id.toString()));
       } else {
         if (messages) {
           throw new Error(messages)

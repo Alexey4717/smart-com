@@ -3,7 +3,7 @@ import { DataLoadingStates } from 'types/utility';
 import type { ContactsType, PhotosType, ProfileType } from 'types/profile';
 import type { GetItemsType as UsersResponse, APIResponseType } from 'store/api';
 import type { UserType, UsersById } from 'types/user';
-import { mapPlacesToStoreEntities } from 'utils/usersUtils';
+import { mapUsersToStoreEntities } from 'utils/usersUtils';
 import { usersAPI } from '../api/users';
 
 export interface UsersState {
@@ -74,7 +74,7 @@ const slice = createSlice({
         const {
           users,
           usersIds
-        } = mapPlacesToStoreEntities(items);
+        } = mapUsersToStoreEntities(items);
 
         state.users.byId = users;
         state.users.ids = usersIds;

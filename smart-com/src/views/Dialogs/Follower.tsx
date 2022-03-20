@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useTheme } from '@mui/system';
 import {
@@ -9,20 +10,24 @@ import {
 } from '@mui/material';
 import { dateConverter } from 'utils/dateConverter';
 import useIdFromHistory from 'hooks/useIdFromHistory';
+import { getDialogByIdSelector } from 'store/selectors/dialogs';
 import { FollowerContainer, ActivityDate } from './styles';
 
-const Follower = ({ dialog }) => {
-  const { palette } = useTheme();
+interface OwnProps {
+  dialogId: string;
+};
+
+const Follower = ({ dialogId }: OwnProps) => {
   const history = useHistory();
+  const dialog = useSelector(getDialogByIdSelector(dialogId))
 
   const { uriId } = useIdFromHistory();
 
   const handleClick = useCallback(() => {
-    history.push(`${id}`);
+    history.push(`${dialogId}`);
   }, [history]);
 
   const {
-    id,
     userName,
     hasNewMessages,
     lastDialogActivityDate,
@@ -33,7 +38,7 @@ const Follower = ({ dialog }) => {
     }
   } = dialog;
 
-  const isDialogActive = uriId === id.toString();
+  const isDialogActive = uriId === dialogId;
   const activityDateDialog = dateConverter(lastDialogActivityDate);
   const activityDateUser = dateConverter(lastUserActivityDate);
 

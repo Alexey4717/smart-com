@@ -1,15 +1,24 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { DataLoadingStates } from 'types/utility';
-import type { Dialog, Messages } from 'types/dialogs';
+import type { Dialog, DialogsById, MessagesById } from 'types/dialogs';
+import {
+  mapDialogsToStoreEntities,
+  mapMessagesToStoreEntities
+} from 'utils/dialogsUtils';
 import { dialogsAPI } from '../api/dialogs';
 
 export interface DialogsState {
   status: DataLoadingStates;
   errors: string | string[];
-  dialogs: Dialog[]; //исправить
-  messages: Messages; //исправить
-  spamMessages: any[]; //исправить
-  deletedMessages: any[]; //исправить
+  dialogs: {
+    ids: string[];
+    byId: DialogsById;
+  }
+  messages: {
+    ids: string[];
+    byId: MessagesById;
+  },
+  totalMessagesCount: number;
   newMessagesCount: number;
 };
 
@@ -18,13 +27,15 @@ const sliceName = 'dialogs';
 const initialState: DialogsState = {
   status: DataLoadingStates.IDLE,
   errors: null,
-  dialogs: [],
-  messages: {
-    items: [],
-    totalCount: 0
+  dialogs: {
+    ids: [],
+    byId: {}
   },
-  spamMessages: [],
-  deletedMessages: [],
+  messages: {
+    ids: [],
+    byId: {}
+  },
+  totalMessagesCount: 0,
   newMessagesCount: 0
 };
 
@@ -45,15 +56,22 @@ const slice = createSlice({
   initialState,
   reducers: {
     setDialog(state: DialogsState, action) {
-      state.dialogs.push(action.payload);
+      const [id, dialog] = action.payload;
+      const dialogId = id.toString();
+      state.dialogs.byId[dialogId] = dialog;
+      state.dialogs.ids.push(dialogId);
     },
     setMessages(state: DialogsState, action) {
-      const { items, totalCount } = action.payload;
-      state.messages.items = items;
-      state.messages.totalCount = totalCount;
+      const { items } = action.payload;
+      const {
+        messages,
+        messagesIds
+      } = mapMessagesToStoreEntities(items);
+      state.messages.byId = messages;
+      state.messages.ids = messagesIds;
     },
     setTotalCount(state: DialogsState, action) {
-      state.messages.totalCount = action.payload;
+      state.totalMessagesCount = action.payload;
     },
     setMessage(state: DialogsState, action) {
       const {
@@ -66,9 +84,8 @@ const slice = createSlice({
         recipientId,
         viewed
       } = action.payload;
-
-      state.messages.items.push({
-        id,
+      const messageId = id.toString();
+      state.messages.byId[messageId] = {
         body,
         translatedBody,
         addedAt,
@@ -76,13 +93,8 @@ const slice = createSlice({
         senderName,
         recipientId,
         viewed
-      });
-    },
-    setSpamMessages(state: DialogsState, action) {
-      state.spamMessages = action.payload;
-    },
-    setDeletedMessages(state: DialogsState, action) {
-      state.deletedMessages = action.payload;
+      };
+      state.messages.ids.push(messageId);
     },
     setNewMessagesCount(state: DialogsState, action) {
       state.newMessagesCount = action.payload;
@@ -94,7 +106,13 @@ const slice = createSlice({
         state.status = DataLoadingStates.LOADING;
       })
       .addCase(getAllDialogs.fulfilled, (state, action) => {
-        state.dialogs = action.payload.data; //посмотреть ответ
+        const { data } = action.payload;
+        const {
+          dialogs,
+          dialogsIds
+        } = mapDialogsToStoreEntities(data);
+        state.dialogs.byId = dialogs;
+        state.dialogs.ids = dialogsIds;
         state.status = DataLoadingStates.IDLE;
       })
       .addCase(getAllDialogs.rejected, (state, { error }) => {
@@ -109,16 +127,8 @@ export const {
   setMessages,
   setMessage,
   setTotalCount,
-  setSpamMessages,
-  setDeletedMessages,
   setNewMessagesCount
 } = slice.actions;
-
-// export const getMessages = (userId): AppThunk => async (dispatch) => {
-//   const response = await dialogsAPI.getMessages(userId);
-//   console.log('messages', response)
-//   dispatch(setMessages(response.items));
-// };
 
 export const { reducer: dialogsReducer } = slice;
 

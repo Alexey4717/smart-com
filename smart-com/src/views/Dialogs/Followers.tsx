@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import type { Dialog } from 'types/dialogs';
 import Follower from './Follower';
 import { FollowersContainer } from './styles';
 

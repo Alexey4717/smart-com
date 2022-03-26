@@ -4,16 +4,20 @@ import { useSnackbar } from 'notistack';
 import { Box, Typography } from '@mui/material';
 import TextInput from "./TextInput";
 import Message from "./Message";
-import { 
-  messagesIdsSelector, 
-  totalCountSelector 
+import {
+  messagesIdsSelector,
+  totalCountSelector
 } from 'store/selectors/dialogs';
 import { setMessages, setTotalCount } from 'store/slices/dialogs';
 import { dialogsAPI } from 'store/api/dialogs';
 import Header from './Header';
 import { DialogContainer } from './styles';
 
-const Dialog = ({ userId }) => {
+interface OwnProps {
+  userId: number
+};
+
+const Dialog = ({ userId }: OwnProps) => {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const messages = useSelector(messagesIdsSelector);
@@ -38,7 +42,7 @@ const Dialog = ({ userId }) => {
         const { items, totalCount, error } = await dialogsAPI.getMessages(userId);
 
         if (items && totalCount !== undefined) {
-          dispatch(setMessages({ items }));
+          dispatch(setMessages(items));
           dispatch(setTotalCount(totalCount))
         } else if (error) {
           throw new Error(error);
@@ -48,7 +52,7 @@ const Dialog = ({ userId }) => {
 
       } catch (error) {
         enqueueSnackbar(
-          `Возникла ошибка в процессе загрузки сообщений: ${error}`,
+          `An error occurred while loading messages: ${error}`,
           { variant: 'error' }
         );
       }
@@ -90,7 +94,7 @@ const Dialog = ({ userId }) => {
           messages?.length
             ? messagesToRender
             : <Typography sx={{ m: 'auto' }}>
-              Нет сообщений
+              No messages
             </Typography>
         }
         <div ref={messagesAnchorRef} />

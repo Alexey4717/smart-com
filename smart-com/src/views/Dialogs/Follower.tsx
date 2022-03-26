@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { useTheme } from '@mui/system';
 import {
   Box,
   Typography,
@@ -67,10 +66,10 @@ const Follower = ({ dialogId }: OwnProps) => {
         <Box>
           <Typography>{userName}</Typography>
           <ActivityDate>
-            Диалог был активен: {activityDateDialog}
+            Dialogue was active: {activityDateDialog}
           </ActivityDate>
           <ActivityDate>
-            Пользователь был активен: {activityDateUser}
+            User was active: {activityDateUser}
           </ActivityDate>
         </Box>
       </FollowerContainer>

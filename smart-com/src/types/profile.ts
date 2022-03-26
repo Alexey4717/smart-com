@@ -22,4 +22,5 @@ export type ProfileType = {
   contacts: ContactsType
   photos: PhotosType
   aboutMe: string
+  userStatus?: string
 };

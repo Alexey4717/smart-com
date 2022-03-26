@@ -50,25 +50,25 @@ export const AuthProvider: FC = ({ children }) => {
       if (resultCode === 0) {
         dispatch(getAuthUserData());
         enqueueSnackbar(
-          'Авторизация прошла успешно',
+          'Authorization is successful',
           { variant: 'success' }
         );
       } else {
         if (resultCode === 10) {
           dispatch(getCapthaUrl())
           enqueueSnackbar(
-            'Введите корректный captcha',
+            'Please enter a valid captcha',
             { variant: 'warning' }
           );
         } else {
-          const message = messages.length > 0 ? messages[0] : 'Неизвестная ошибка';
+          const message = messages.length > 0 ? messages[0] : 'Unknown error';
           throw new Error(message)
         }
       }
 
     } catch (error) {
       enqueueSnackbar(
-        `Возникла ошибка в процессе авторизации: ${error}`,
+        `An authorization error has occurred: ${error}`,
         { variant: 'error' }
       );
     }
@@ -87,18 +87,20 @@ export const AuthProvider: FC = ({ children }) => {
       if (resultCode === 0) {
         dispatch(storeLogout());
         enqueueSnackbar(
-          'Сессия пользователя успешно завершена',
+          'User session ended successfully',
           { variant: 'success' }
         );
         history.push('/login/');
+      } else if (messages.length) {
+        const message = messages.length > 0 ? messages[0] : 'Unknown error';
+        throw new Error(message);
       } else {
-        const message = messages.length > 0 ? messages[0] : 'Неизвестная ошибка';
-        throw new Error(message)
+        throw new Error();
       }
     } catch (error) {
       const { errors } = error ?? {};
       enqueueSnackbar(
-        `Возникла ошибка при закрытии сессии пользователя: ${errors}`,
+        `An error occurred while closing the user session: ${errors}`,
         { variant: 'error' }
       );
     }

@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { NavLink, useHistory } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { dialogsAPI } from 'store/api/dialogs';
 import { setDialog } from 'store/slices/dialogs';
@@ -11,11 +11,18 @@ import {
   Avatar,
   NameItem
 } from './styles';
+import { APIResponseType } from 'store/api';
 
 const dialogsPath = paths.dialogs;
 const profilePath = paths.profile;
 
-const Follower = ({ id, name, photo }) => {
+interface OwnProps {
+  id: number
+  name: string
+  photo: string
+};
+
+const Follower = ({ id, name, photo }: OwnProps) => {
 
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
@@ -26,20 +33,20 @@ const Follower = ({ id, name, photo }) => {
       const {
         resultCode,
         messages
-      } = await dialogsAPI.startDialog(id);
+      }: APIResponseType = await dialogsAPI.startDialog(id);
 
       if (resultCode === 0) {
         dispatch(setDialog(id.toString()));
       } else {
         if (messages) {
-          throw new Error(messages)
+          throw new Error(messages[0])
         } else {
           throw new Error()
         }
       }
     } catch (error) {
       enqueueSnackbar(
-        `Возникла ошибка при попытке установить диалог ${error ? error : ''}`,
+        `An error occurred while trying to open the dialog ${error ? error : ''}`,
         { variant: 'error' }
       );
     }
@@ -71,7 +78,7 @@ const Follower = ({ id, name, photo }) => {
             to={dialogsPath + id}
             onClick={startDialog}
           >
-            Написать
+            Open dialog
           </NavLink>
         </Items>
       </Wrapper>

@@ -1,10 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { AuthUser } from 'types/user';
 import { DataLoadingStates } from 'types/utility';
-import { authAPI } from '../api/auth';
-import { securityAPI } from '../api/security';
-import type { GetCaptchaUrlResponseType } from '../api/security';
-
+import { authAPI, MeResponseDataType } from '../api/auth';
+import { securityAPI, GetCaptchaUrlResponseType } from '../api/security';
 export interface AuthState {
   status: DataLoadingStates;
   errors: string | string[];
@@ -29,30 +27,16 @@ const initialState: AuthState = {
   },
 };
 
-interface AuthUserResponse {
-  data: AuthUser;
-  resultCode?: number | string;
-};
-
-export const getAuthUserData = createAsyncThunk<AuthUserResponse>(
+export const getAuthUserData = createAsyncThunk<MeResponseDataType>(
   `${sliceName}/getAuthUserData`,
-  async (): Promise<AuthUserResponse> => {
-    const response = await authAPI.me();
-    return response;
+  async () => {
+    const { data } = await authAPI.me();
+    return data
   });
 
-  interface CaptchaResponse {
-    data: GetCaptchaUrlResponseType;
-    resultCode?: number | string;
-  }
-
-export const getCapthaUrl = createAsyncThunk<CaptchaResponse>(
+export const getCapthaUrl = createAsyncThunk<GetCaptchaUrlResponseType>(
   `${sliceName}/getCapthaUrl`,
-  async (): Promise<CaptchaResponse> => {
-    const response = await securityAPI.getCaptchaUrl();
-    const captchaUrl = response.url;
-    return captchaUrl;
-  });
+  async () => await securityAPI.getCaptchaUrl());
 
 const slice = createSlice({
   name: sliceName,
@@ -71,8 +55,8 @@ const slice = createSlice({
         state.status = DataLoadingStates.LOADING;
       })
       .addCase(getAuthUserData.fulfilled, (state, action) => {
-        
-        const { id, login, email } = action.payload.data;
+
+        const { id, login, email } = action.payload;
         state.user.id = id;
         state.user.login = login;
         state.user.email = email;

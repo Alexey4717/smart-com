@@ -1,9 +1,9 @@
 import type { EntityById, EntitiesById } from './common';
 
 export type AuthUser = {
-  id: number,
-  login: string,
-  email:string,
+  id: number
+  login: string
+  email:string
 };
 
 export type PhotosType = {

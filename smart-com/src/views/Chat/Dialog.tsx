@@ -55,7 +55,7 @@ const Dialog = () => {
   return (
     <Container onScroll={scrollHandler}>
       <Heading>
-        Общий чат
+        Common chat
       </Heading>
       <Messages>
         {messagesToRender}

@@ -85,7 +85,7 @@ const LoginForm: FC = () => {
           {({ field, meta: { error, touched } }) => (
             <TextField
               {...field}
-              label='Имя пользователя'
+              label='User name'
               error={Boolean(touched && error)}
               helperText={touched && error}
               margin="normal"
@@ -98,7 +98,7 @@ const LoginForm: FC = () => {
             <TextField
               {...field}
               type="password"
-              label="Пароль"
+              label="Password"
               error={Boolean(touched && error)}
               helperText={touched && error}
               margin="normal"
@@ -117,7 +117,7 @@ const LoginForm: FC = () => {
             {({ field, meta: { error, touched } }) => (
               <Checkbox
                 {...field}
-                label={"Запомнить меня"}
+                label={"Remember me"}
                 name="rememberMe"
                 error={Boolean(touched && error)}
                 helperText={touched && error}
@@ -131,8 +131,8 @@ const LoginForm: FC = () => {
           && <Box>
             <Divider sx={{ my: '24px' }} />
             <Typography sx={{ textAlign: 'center', color: 'red' }}>
-              Вы произвели 10 или более неудачных попыток авторизации.
-              Для дальнейшей аутентификации пользователя требуется ввести символы из captcha.
+              You have made 10 or more failed login attempts.
+              For further user authentication, you need to enter characters from the captcha.
             </Typography>
             <CaptchaImage src={captchaUrl} alt="captcha" />
             <Field name="captcha">
@@ -157,7 +157,7 @@ const LoginForm: FC = () => {
             type="submit"
             variant="contained"
           >
-            Войти
+            Sign in
           </Button>
         </Box>
       </FormikForm>

@@ -44,7 +44,7 @@ const Dialogs = () => {
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       <Box sx={{ marginRight: 2 }}>
         <Typography color="textSecondary">
-          С вашими подписчиками
+          With your followers
         </Typography>
       </Box>
     </Box>
@@ -52,7 +52,7 @@ const Dialogs = () => {
 
   return (
     <View
-      pageTitle="Переписка"
+      pageTitle="Dialogs"
       pageSubTitle={subTitle}
     >
       {isLoading ? <Loader /> : dialogs && (
@@ -71,7 +71,7 @@ const Dialogs = () => {
             {
               isUriId
                 ? <Dialog
-                  userId={uriId}
+                  userId={Number(uriId)}
                 />
                 : <Typography
                   sx={{
@@ -79,7 +79,7 @@ const Dialogs = () => {
                     m: 'auto'
                   }}
                 >
-                  Для вывода сообщений нажмите на соответствующий диалог
+                  To display messages, click on the corresponding dialog
                 </Typography>
             }
           </Box>
@@ -88,7 +88,7 @@ const Dialogs = () => {
       {(loadingStatus === ERROR) && (
         <Alert severity="error">
           <Typography>
-            Возникла ошибка при загрузке сообщений
+            An error occurred while loading messages
             {errors && `: ${errors}`}
           </Typography>
         </Alert>

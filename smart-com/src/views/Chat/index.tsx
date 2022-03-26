@@ -48,7 +48,7 @@ const Chat = () => {
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       <Box sx={{ marginRight: 2 }}>
         <Typography color="textSecondary">
-          Последние 100 сообщений
+          Last 100 messages
         </Typography>
       </Box>
     </Box>
@@ -71,7 +71,7 @@ const Chat = () => {
       {(loadingStatus === ERROR) && (
         <Alert severity="error">
           <Typography>
-            Возникла ошибка при загрузке чата
+            An error occurred while loading the chat
             {errors && `: ${errors}`}
           </Typography>
         </Alert>

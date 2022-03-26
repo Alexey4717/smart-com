@@ -2,7 +2,12 @@ import { ListItemIcon } from '@mui/material';
 import { useTheme } from '@mui/system';
 import { SocialIcon } from 'react-social-icons';
 
-const Service = ({ name, link }) => {
+interface OwnProps {
+  name: string
+  link: string
+};
+
+const Service = ({ name, link }: OwnProps) => {
   const { palette } = useTheme();
 
   let networkName;

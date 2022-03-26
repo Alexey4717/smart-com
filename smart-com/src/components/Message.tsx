@@ -78,7 +78,7 @@ const Message = ({
       if (resultCode === 0) {
         setIsDeletedMessage(true)
         enqueueSnackbar(
-          'Сообщение успешно удалено. Вы ещё можете восстановить его, пока не обновите страницу браузера',
+          'The message deleted successfully. You can still restore it until you refresh your browser page',
           { variant: 'success' }
         );
       } else if (fieldsErrors) {
@@ -89,7 +89,7 @@ const Message = ({
 
     } catch (error) {
       enqueueSnackbar(
-        `Возникла ошибка в процессе удаления сообщения: ${error}`,
+        `An error occurred while deleting a message: ${error}`,
         { variant: 'error' }
       );
     }
@@ -105,7 +105,7 @@ const Message = ({
       if (resultCode === 0) {
         setIsDeletedMessage(false)
         enqueueSnackbar(
-          'Сообщение успешно восстановлено',
+          'Message restored successfully',
           { variant: 'success' }
         );
       } else if (fieldsErrors) {
@@ -116,7 +116,7 @@ const Message = ({
 
     } catch (error) {
       enqueueSnackbar(
-        `Возникла ошибка в процессе восстановления сообщения: ${error}`,
+        `An error occurred while restoring a message: ${error}`,
         { variant: 'error' }
       );
     }
@@ -163,8 +163,8 @@ const Message = ({
             && <Tooltip
               title={
                 isDeletedMessage
-                  ? 'Восстановить сообщение'
-                  : 'Удалить сообщение'
+                  ? 'Restore message'
+                  : 'Delete message'
               }
             >
               <IconButton
@@ -190,7 +190,7 @@ const Message = ({
             }}
             component='p'
           >
-            {userName ? userName : "безымянный человек"}
+            {userName ? userName : "nameless person"}
           </Typography>
         </Box>
         <MessageBody isMyMessage={isMyMessage}>

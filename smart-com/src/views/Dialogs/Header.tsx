@@ -10,7 +10,7 @@ import { HeaderContainer } from './styles';
 const dialogsPath = paths.dialogs;
 
 interface OwnProps {
-  userName: string;
+  userName: number;
   totalCountMessages: number;
 };
 
@@ -20,7 +20,7 @@ const Header = ({ userName, totalCountMessages }: OwnProps) => {
 
   return (
     <HeaderContainer>
-      <NavLink 
+      <NavLink
         style={{
           textDecoration: 'none',
           color: 'inherit'
@@ -33,10 +33,10 @@ const Header = ({ userName, totalCountMessages }: OwnProps) => {
       </NavLink>
       <Box>
         <Typography>
-          Диалог с {userName}
+          Dialog with {userName}
         </Typography>
         <Typography>
-          Всего сообщений: {totalCountMessages}
+          Total messages: {totalCountMessages}
         </Typography>
       </Box>
     </HeaderContainer>

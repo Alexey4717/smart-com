@@ -24,6 +24,7 @@ const Container = styled(ImageListItem)(({ theme }) => ({
 }))
 
 const profilePath = paths.profile;
+
 interface OwnProps {
   id: string
 };
@@ -52,7 +53,7 @@ const User = ({ id }: OwnProps) => {
       if (resultCode === 0) {
         dispatch(followUser(id));
         enqueueSnackbar(
-          `Вы успешно подписались на пользователя ${name}`,
+          `You have successfully subscribed to a user ${name}`,
           { variant: 'success' }
         );
       } else {
@@ -64,7 +65,7 @@ const User = ({ id }: OwnProps) => {
       }
     } catch (error) {
       enqueueSnackbar(
-        `Возникла ошибка при попытке подписаться на пользователя ${name}: ${error}`,
+        `An error occurred while trying to subscribe to a user ${name}: ${error}`,
         { variant: 'error' }
       );
     }
@@ -81,7 +82,7 @@ const User = ({ id }: OwnProps) => {
       if (resultCode === 0) {
         dispatch(unfollowUser(id))
         enqueueSnackbar(
-          `Вы успешно отписались от пользователя ${name}`,
+          `You have successfully unsubscribed from the user ${name}`,
           { variant: 'success' }
         );
       } else {
@@ -93,7 +94,7 @@ const User = ({ id }: OwnProps) => {
       }
     } catch (error) {
       enqueueSnackbar(
-        `Возникла ошибка при попытке отписаться от пользователя ${name}: ${error}`,
+        `An error occurred while trying to unfollow a user ${name}: ${error}`,
         { variant: 'error' }
       );
     }
@@ -113,7 +114,7 @@ const User = ({ id }: OwnProps) => {
       <ImageListItemBar
         sx={{ pr: 2 }}
         title={name}
-        subtitle={status ? status : 'Статус отсутствует'}
+        subtitle={status ? status : 'No status'}
         actionIcon={
           <Button
             sx={{
@@ -126,7 +127,7 @@ const User = ({ id }: OwnProps) => {
             onClick={followed ? handleUnfollowUser : handleFollowUser}
           >
             <Typography sx={{ mr: 1, fontSize: 12 }}>
-              {followed ? 'Отписаться' : 'Подписаться'}
+              {followed ? 'Unsubscribe' : 'Subscribe'}
             </Typography>
             {followed ? <PersonRemoveIcon /> : <PersonAddIcon />}
           </Button>

@@ -38,7 +38,7 @@ const Users = () => {
   const [term, setTerm] = useState<string>('');
 
   useEffect(() => {
-    dispatch(getUsersData({currentPage: 1, pageSize, term, friend: null}));
+    dispatch(getUsersData({ currentPage: 1, pageSize, term, friend: null }));
   }, [dispatch, pageSize, term]);
 
   const handleChangeCurrentPage = useCallback((
@@ -61,7 +61,7 @@ const Users = () => {
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       <Box sx={{ marginRight: 2 }}>
         <Typography color="textSecondary">
-          Зарегистрированные в социальной сети
+          Registered in the social network
         </Typography>
       </Box>
     </Box>
@@ -69,11 +69,11 @@ const Users = () => {
 
   return (
     <View
-      pageTitle="Пользователи"
+      pageTitle="Users"
       pageSubTitle={subTitle}
       search={{
         query: term,
-        placeholder: 'Поиск пользователей',
+        placeholder: 'User search',
         onSubmit: handleSearch
       }}
       pagination={{
@@ -86,7 +86,7 @@ const Users = () => {
       {(loadingStatus === ERROR) && (
         <Alert severity="error">
           <Typography>
-            Возникла ошибка при загрузке пользователей
+            An error occurred while loading users
             {errors && `: ${errors}`}
           </Typography>
         </Alert>

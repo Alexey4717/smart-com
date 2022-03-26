@@ -10,7 +10,7 @@ import { HeaderContainer } from './styles';
 const dialogsPath = paths.dialogs;
 
 interface OwnProps {
-  userName: string;
+  userName: number;
   totalCountMessages: number;
 };
 

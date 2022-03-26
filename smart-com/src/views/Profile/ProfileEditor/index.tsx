@@ -17,7 +17,12 @@ import { profileSelector } from 'store/selectors/profile';
 import { getProfileById } from 'store/slices/profile';
 import Checkbox from 'components/Checkbox';
 import { styled } from '@mui/system';
-import { validationSchema, formInitialValues, fields, contacts } from './formSettings';
+import { 
+  validationSchema, 
+  formInitialValues, 
+  fields, 
+  contacts 
+} from './formSettings';
 
 const Header = styled('span')(({ theme }) => ({
   display: 'inline-block',

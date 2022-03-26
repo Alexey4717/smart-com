@@ -3,11 +3,7 @@ import { DataLoadingStates } from 'types/utility';
 import type { ContactsType, PhotosType, ProfileType } from 'types/profile';
 import { profileAPI } from '../api/profile';
 
-type ProfileResponse = ProfileType & {
-  userStatus: string;
-}
-
-interface Profile extends ProfileResponse {
+interface Profile extends ProfileType {
   contacts: ContactsType;
   photos: PhotosType;
 };
@@ -47,14 +43,16 @@ const initialState: ProfileState = {
   }
 };
 
-export const getProfileById = createAsyncThunk<ProfileResponse, number>(
-  `${sliceName}/getProfileById`,
-  async (id): Promise<ProfileResponse> => {
+export const getProfileById = createAsyncThunk<ProfileType, number>(
+  // @ts-ignore
+  `${sliceName}/getProfileById`, async (id) => {
     const response = await profileAPI.getProfile(id);
-    const { data: userStatus } = await profileAPI.getStatus(id);
-    response.data.userStatus = userStatus;
-    return response.data;
-  });
+    const userStatus = await profileAPI.getStatus(id);
+    // @ts-ignore
+    response.userStatus = userStatus;
+    return response;
+  }
+);
 
 const slice = createSlice({
   name: sliceName,
@@ -70,7 +68,6 @@ const slice = createSlice({
         state.status = DataLoadingStates.LOADING;
       })
       .addCase(getProfileById.fulfilled, (state, action) => {
-
         const {
           userId,
           lookingForAJob,

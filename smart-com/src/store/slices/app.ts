@@ -3,7 +3,7 @@ import { getAuthUserData } from './auth';
 
 export interface AppState {
   initialized: boolean;
-}
+};
 
 const sliceName = 'app';
 
@@ -12,10 +12,8 @@ const initialState: AppState = {
 };
 
 export const initializeApp = () => (dispatch) => {
-  
   let promise = dispatch(getAuthUserData());
   Promise.all([promise]).then(() => {
-    
     dispatch(setAppInitialized(true));
   });
 }

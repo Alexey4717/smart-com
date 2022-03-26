@@ -24,6 +24,7 @@ const Container = styled(ImageListItem)(({ theme }) => ({
 }))
 
 const profilePath = paths.profile;
+
 interface OwnProps {
   id: string
 };

@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { DataLoadingStates } from 'types/utility';
-import type { Dialog, DialogsById, MessagesById } from 'types/dialogs';
+import type { DialogsById, MessagesById } from 'types/dialogs';
 import {
   mapDialogsToStoreEntities,
   mapMessagesToStoreEntities
 } from 'utils/dialogsUtils';
-import { dialogsAPI } from '../api/dialogs';
+import { dialogsAPI, AllDialogsResponse } from '../api/dialogs';
 
 export interface DialogsState {
   status: DataLoadingStates;
@@ -39,17 +39,9 @@ const initialState: DialogsState = {
   newMessagesCount: 0
 };
 
-interface AllDialogsResponse {
-  data: Dialog[]; //исправить
-  resultCode?: number | string;
-};
-
 export const getAllDialogs = createAsyncThunk<AllDialogsResponse>(
   `${sliceName}/getAllDialogs`,
-  async (): Promise<AllDialogsResponse> => {
-    const response = await dialogsAPI.getAllDialogs();
-    return response;
-  });
+  async () => await dialogsAPI.getAllDialogs());
 
 const slice = createSlice({
   name: sliceName,
@@ -62,11 +54,10 @@ const slice = createSlice({
       state.dialogs.ids.push(dialogId);
     },
     setMessages(state: DialogsState, action) {
-      const { items } = action.payload;
       const {
         messages,
         messagesIds
-      } = mapMessagesToStoreEntities(items);
+      } = mapMessagesToStoreEntities(action.payload);
       state.messages.byId = messages;
       state.messages.ids = messagesIds;
     },
@@ -106,11 +97,10 @@ const slice = createSlice({
         state.status = DataLoadingStates.LOADING;
       })
       .addCase(getAllDialogs.fulfilled, (state, action) => {
-        const { data } = action.payload;
         const {
           dialogs,
           dialogsIds
-        } = mapDialogsToStoreEntities(data);
+        } = mapDialogsToStoreEntities(action.payload);
         state.dialogs.byId = dialogs;
         state.dialogs.ids = dialogsIds;
         state.status = DataLoadingStates.IDLE;

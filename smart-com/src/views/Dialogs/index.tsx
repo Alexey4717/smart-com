@@ -71,7 +71,7 @@ const Dialogs = () => {
             {
               isUriId
                 ? <Dialog
-                  userId={uriId}
+                  userId={Number(uriId)}
                 />
                 : <Typography
                   sx={{

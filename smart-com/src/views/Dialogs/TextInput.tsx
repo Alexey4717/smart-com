@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { styled } from '@mui/material/styles';
 import { Button, Box, Alert } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import {
@@ -44,6 +43,7 @@ const TextInput = ({ userId }: OwnProps) => {
   }) => {
     try {
       const {
+        // @ts-ignore
         data: { message },
         fieldsErrors,
         resultCode

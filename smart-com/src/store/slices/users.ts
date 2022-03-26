@@ -1,8 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { DataLoadingStates } from 'types/utility';
-import type { ContactsType, PhotosType, ProfileType } from 'types/profile';
-import type { GetItemsType as UsersResponse, APIResponseType } from 'store/api';
-import type { UserType, UsersById } from 'types/user';
+import type { GetUsersType } from 'store/api/users';
+import type { UsersById } from 'types/user';
 import { mapUsersToStoreEntities } from 'utils/usersUtils';
 import { usersAPI } from '../api/users';
 
@@ -36,17 +35,13 @@ type GetUsersDataRequest = {
   currentPage?: number,
   pageSize?: number,
   term?: string,
-  friend?: null | boolean
+  friend?: boolean
 };
 
-export const getUsersData = createAsyncThunk/*<UsersResponse>*/(
-  `${sliceName}/getUsersData`,
-  async (
-    { currentPage, pageSize, term, friend }: GetUsersDataRequest
-  ): Promise<UsersResponse> => {
-    const response = await usersAPI.getUsers(currentPage, pageSize, term, friend);
-    return response;
-  });
+export const getUsersData = createAsyncThunk<GetUsersType, GetUsersDataRequest>(
+  `${sliceName}/getUsersData`, async ({ 
+    currentPage, pageSize, term, friend 
+  }) => await usersAPI.getUsers(currentPage, pageSize, term, friend));
 
 const slice = createSlice({
   name: sliceName,

@@ -91,9 +91,11 @@ export const AuthProvider: FC = ({ children }) => {
           { variant: 'success' }
         );
         history.push('/login/');
-      } else {
+      } else if (messages.length) {
         const message = messages.length > 0 ? messages[0] : 'Неизвестная ошибка';
-        throw new Error(message)
+        throw new Error(message);
+      } else {
+        throw new Error();
       }
     } catch (error) {
       const { errors } = error ?? {};

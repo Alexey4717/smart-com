@@ -13,7 +13,11 @@ import { dialogsAPI } from 'store/api/dialogs';
 import Header from './Header';
 import { DialogContainer } from './styles';
 
-const Dialog = ({ userId }) => {
+interface OwnProps {
+  userId: number
+};
+
+const Dialog = ({ userId }: OwnProps) => {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const messages = useSelector(messagesIdsSelector);
@@ -38,7 +42,7 @@ const Dialog = ({ userId }) => {
         const { items, totalCount, error } = await dialogsAPI.getMessages(userId);
 
         if (items && totalCount !== undefined) {
-          dispatch(setMessages({ items }));
+          dispatch(setMessages(items));
           dispatch(setTotalCount(totalCount))
         } else if (error) {
           throw new Error(error);

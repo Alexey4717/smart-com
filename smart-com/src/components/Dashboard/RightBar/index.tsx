@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { usersAPI } from 'store/api/users';
-import type { GetItemsType } from 'store/api';
 import type { UserType } from 'types/user';
 import Follower from './Follower';
 import {
@@ -20,7 +19,7 @@ const RightBar = () => {
           items,
           totalCount,
           error
-        }: GetItemsType = await usersAPI.getUsers(1, 100, '', true);
+        } = await usersAPI.getUsers(1, 100, '', true);
 
         if (items.length) {
           setFollowersData(items);

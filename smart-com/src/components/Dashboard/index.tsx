@@ -53,9 +53,7 @@ const Dashboard: FC<DashboardLayoutProps> = ({ children }) => {
           openMobile={isMobileNavOpen}
         />
         <CentralPanel>
-
-            {children}
-
+          {children}
         </CentralPanel>
         <RightBar />
       </Wrapper>

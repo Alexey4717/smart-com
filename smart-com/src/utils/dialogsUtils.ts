@@ -1,4 +1,4 @@
-import type { DialogsById, Dialog, MessagesById, Message } from 'types/dialogs';
+import type { DialogsById, Dialog, MessagesById, ShortMessage } from 'types/dialogs';
 
 export const mapDialogsToStoreEntities = (
   dialogsArray: Dialog[]
@@ -47,7 +47,7 @@ export const mapDialogsToStoreEntities = (
 };
 
 export const mapMessagesToStoreEntities = (
-  dialogsArray: Message[]
+  dialogsArray: ShortMessage[]
 ) => {
   const hasMessagesArrayLength = Boolean(dialogsArray.length);
   const messages: MessagesById = {};

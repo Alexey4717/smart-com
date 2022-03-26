@@ -14,22 +14,22 @@ const {
 
 const sections: Section[] = [
   {
-    title: 'Профиль',
+    title: 'Profile',
     icon: AccountCircleIcon,
     href: profilePath
   },
   {
-    title: 'Переписки',
+    title: 'Dialogs',
     icon: ChatIcon,
     href: dialogsPath
   },
   {
-    title: 'Пользователи',
+    title: 'Users',
     icon: PeopleIcon,
     href: usersPath
   },
   {
-    title: 'Общий чат',
+    title: 'Common chat',
     icon: ForumIcon,
     href: chatPath
   }

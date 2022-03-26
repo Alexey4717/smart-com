@@ -11,7 +11,7 @@ import {
 } from './styles';
 
 const Login = () => (
-  <LoginPage title="Вход в систему">
+  <LoginPage title="Login">
     <LoginContainer maxWidth="sm">
       <Card>
         <LoginCardContent>
@@ -21,13 +21,13 @@ const Login = () => (
               gutterBottom
               variant="h2"
             >
-              Вход в "Smart Com"
+              Sign in "Smart Com"
             </Heading>
             <Heading
               variant="body2"
               color="textSecondary"
             >
-              Введите свои данные для входа в социальную сеть
+              Enter your social network login details
             </Heading>
           </Box>
           <LoginForm />

@@ -43,7 +43,7 @@ const RightBar = () => {
   return (
     <Container>
       <Header>
-        Подписчики ({totalFollowersCount}):
+        Followers ({totalFollowersCount}):
       </Header>
       <Box>
         {followersData.map(({ id, name, photos: { small } }) => (

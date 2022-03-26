@@ -36,7 +36,7 @@ const Dashboard: FC<DashboardLayoutProps> = ({ children }) => {
       history.push('/');
     } catch (err) {
       console.error(err);
-      enqueueSnackbar('Возникла ошибка при выходе из системы', {
+      enqueueSnackbar('An error occurred while logging out', {
         variant: 'error',
       });
     }

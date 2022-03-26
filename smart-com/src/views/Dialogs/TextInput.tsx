@@ -93,7 +93,7 @@ const TextInput = ({ userId }: OwnProps) => {
                   {...field}
                   error={Boolean(touched && error)}
                   helperText={touched && error}
-                  label="Введите сообщение"
+                  label="Enter your message"
                 />
               )}
             </Field>

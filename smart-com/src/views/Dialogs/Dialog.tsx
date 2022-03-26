@@ -4,9 +4,9 @@ import { useSnackbar } from 'notistack';
 import { Box, Typography } from '@mui/material';
 import TextInput from "./TextInput";
 import Message from "./Message";
-import { 
-  messagesIdsSelector, 
-  totalCountSelector 
+import {
+  messagesIdsSelector,
+  totalCountSelector
 } from 'store/selectors/dialogs';
 import { setMessages, setTotalCount } from 'store/slices/dialogs';
 import { dialogsAPI } from 'store/api/dialogs';
@@ -52,7 +52,7 @@ const Dialog = ({ userId }: OwnProps) => {
 
       } catch (error) {
         enqueueSnackbar(
-          `Возникла ошибка в процессе загрузки сообщений: ${error}`,
+          `An error occurred while loading messages: ${error}`,
           { variant: 'error' }
         );
       }
@@ -94,7 +94,7 @@ const Dialog = ({ userId }: OwnProps) => {
           messages?.length
             ? messagesToRender
             : <Typography sx={{ m: 'auto' }}>
-              Нет сообщений
+              No messages
             </Typography>
         }
         <div ref={messagesAnchorRef} />

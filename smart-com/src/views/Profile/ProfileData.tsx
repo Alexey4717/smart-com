@@ -74,7 +74,7 @@ const ProfileData = ({ isAuthUser }: OwnProps) => {
 
       if (resultCode === 0) {
         enqueueSnackbar(
-          'Фотография успешно загружена',
+          'Photo uploaded successfully',
           { variant: 'success' }
         );
       } else {
@@ -87,7 +87,7 @@ const ProfileData = ({ isAuthUser }: OwnProps) => {
 
     } catch (error) {
       enqueueSnackbar(
-        `Возникла ошибка при загрузке фотографии${error ? `: ${error}` : ''}.`,
+        `There was an error uploading the photo${error ? `: ${error}` : ''}.`,
         { variant: 'error' }
       );
     };
@@ -105,7 +105,7 @@ const ProfileData = ({ isAuthUser }: OwnProps) => {
       if (resultCode === 0) {
         dispatch(setStatus(status));
         enqueueSnackbar(
-          'Статус успешно обновлён',
+          'Status updated successfully',
           { variant: 'success' }
         );
       } else {
@@ -118,7 +118,7 @@ const ProfileData = ({ isAuthUser }: OwnProps) => {
 
     } catch (error) {
       enqueueSnackbar(
-        `Возникла ошибка при обновлении статуса${error ? `: ${error}` : ''}.`,
+        `An error occurred while updating the status${error ? `: ${error}` : ''}.`,
         { variant: 'error' }
       );
     };
@@ -140,8 +140,8 @@ const ProfileData = ({ isAuthUser }: OwnProps) => {
     isAuthUser
       ? (
         userStatus
-          ? 'Двойной клик по статусу для его изменения'
-          : 'Двойной клик для добавления статуса'
+          ? 'Double click on status to change it'
+          : 'Double click to add status'
       )
       : ''
   ), [isAuthUser, userStatus]);
@@ -155,7 +155,7 @@ const ProfileData = ({ isAuthUser }: OwnProps) => {
             src={photos.large}
           />
           {isAuthUser && (
-            <Tooltip title="Нажмите для загрузки 1 фотографии">
+            <Tooltip title="Click to download 1 photo">
               <AddPhoto onChange={handleUploadPhoto}>
                 <AddAPhotoIcon color="secondary" />
                 <input type="file" hidden />
@@ -170,16 +170,16 @@ const ProfileData = ({ isAuthUser }: OwnProps) => {
       <ProfileItems>
         <MainInfo>
           <StatusWrapper onDoubleClick={toggleEditStatusMode}>
-            Статус:
+            Status:
             <br />
             {
               editStatusMode
                 ? <TextField
                   sx={{ width: '100%', display: 'block' }}
                   name='status'
-                  label={'Введите статус'}
+                  label={'Enter status'}
                   margin="normal"
-                  helperText="Нажмите на любое место вне поля, чтобы изменить статус"
+                  helperText="Click anywhere outside the field to change the status"
                   defaultValue={userStatus}
                   onBlur={(event) => changeUserStatus(event.target.value)}
                 />
@@ -202,7 +202,7 @@ const ProfileData = ({ isAuthUser }: OwnProps) => {
             {
               Boolean(servicesLinks.length)
               && <SocialsHeading>
-                Соцсети:
+                Social network:
               </SocialsHeading>
             }
             <List
@@ -220,11 +220,11 @@ const ProfileData = ({ isAuthUser }: OwnProps) => {
           flexBasis: '60%'
         }}>
           <FormHeading>
-            Анкета пользователя:
+            User profile:
           </FormHeading>
           <FormItems>
             <FormTitle>
-              Статус соискателя:
+              Applicant Status:
             </FormTitle>
             <FormItem>
               <LookingForAJobItem
@@ -233,13 +233,13 @@ const ProfileData = ({ isAuthUser }: OwnProps) => {
                 }}
               >
                 <CircleIcon />
-                {lookingForAJob ? 'нахожусь в поиске работы' : 'не ищу работу'}
+                {lookingForAJob ? 'I am looking for a job' : 'not looking for a job'}
               </LookingForAJobItem>
             </FormItem>
           </FormItems>
           <FormItems>
             <FormTitle>
-              Данные анкеты:
+              Profile data:
             </FormTitle>
             <FormItem>
               {lookingForAJobDescription}
@@ -247,7 +247,7 @@ const ProfileData = ({ isAuthUser }: OwnProps) => {
           </FormItems>
           <FormItems>
             <FormTitle>
-              Обо мне:
+              About me:
             </FormTitle>
             <FormItem>
               {aboutMe}

@@ -68,44 +68,7 @@ const slice = createSlice({
         state.status = DataLoadingStates.LOADING;
       })
       .addCase(getProfileById.fulfilled, (state, action) => {
-        const {
-          userId,
-          lookingForAJob,
-          lookingForAJobDescription,
-          fullName,
-          contacts: {
-            github,
-            vk,
-            facebook,
-            instagram,
-            twitter,
-            website,
-            youtube,
-            mainLink
-          },
-          photos: {
-            small,
-            large
-          },
-          aboutMe,
-          userStatus
-        } = action.payload;
-        state.profile.userId = userId;
-        state.profile.lookingForAJob = lookingForAJob;
-        state.profile.lookingForAJobDescription = lookingForAJobDescription;
-        state.profile.fullName = fullName;
-        state.profile.contacts.github = github;
-        state.profile.contacts.vk = vk;
-        state.profile.contacts.facebook = facebook;
-        state.profile.contacts.instagram = instagram;
-        state.profile.contacts.twitter = twitter;
-        state.profile.contacts.website = website;
-        state.profile.contacts.youtube = youtube;
-        state.profile.contacts.mainLink = mainLink;
-        state.profile.photos.small = small;
-        state.profile.photos.large = large;
-        state.profile.aboutMe = aboutMe;
-        state.profile.userStatus = userStatus;
+        state.profile = action.payload;
         state.status = DataLoadingStates.IDLE;
       })
       .addCase(getProfileById.rejected, (state, { error }) => {

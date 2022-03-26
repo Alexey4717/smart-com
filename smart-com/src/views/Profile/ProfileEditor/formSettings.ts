@@ -60,56 +60,56 @@ export const fields = [
   {
     type: 'text',
     name: 'fullName',
-    label: 'Имя пользователя',
+    label: 'User name',
   },
   {
     type: 'text',
     name: 'aboutMe',
-    label: 'Обо мне',
+    label: 'About me',
   },
   {
     type: 'checkbox',
     name: 'lookingForAJob',
-    label: 'В поиске работы',
+    label: 'Looking for a job',
   },
   {
     type: 'text',
     name: 'lookingForAJobDescription',
-    label: 'Данные анкеты',
+    label: 'Looking for a job description',
   }
 ];
 
 export const contacts = [
   {
     name: 'contacts.github',
-    label: 'Ссылка на github',
+    label: 'Link to github',
   },
   {
     name: 'contacts.vk',
-    label: 'Ссылка на vkontakte',
+    label: 'Link to vkontakte',
   },
   {
     name: 'contacts.facebook',
-    label: 'Ссылка на facebook',
+    label: 'Link to facebook',
   },
   {
     name: 'contacts.instagram',
-    label: 'Ссылка на instagram',
+    label: 'Link to instagram',
   },
   {
     name: 'contacts.twitter',
-    label: 'Ссылка на twitter',
+    label: 'Link to twitter',
   },
   {
     name: 'contacts.website',
-    label: 'Ссылка на website',
+    label: 'Link to website',
   },
   {
     name: 'contacts.youtube',
-    label: 'Ссылка на youtube-канал',
+    label: 'Link to youtube-channel',
   },
   {
     name: 'contacts.mainLink',
-    label: 'Ссылка на mainLink',
+    label: 'Link to mainLink',
   },
 ];

@@ -70,7 +70,7 @@ const ProfileEditor = ({ setIsEditMode }: OwnProps) => {
         setStatus({ success: true });
         setSubmitting(false);
         enqueueSnackbar(
-          `Данные пользователя успешно обновлены`,
+          `User data updated successfully`,
           { variant: 'success' }
         );
         dispatch(getProfileById(profile.userId))
@@ -88,7 +88,7 @@ const ProfileEditor = ({ setIsEditMode }: OwnProps) => {
       setErrors({ submit: error?.response?.data?.detail ?? error.message });
       setSubmitting(false);
       enqueueSnackbar(
-        `Возникла ошибка в процессе авторизации: ${error}`,
+        `An error occurred during authorization: ${error}`,
         { variant: 'error' }
       );
     }
@@ -107,7 +107,7 @@ const ProfileEditor = ({ setIsEditMode }: OwnProps) => {
       }) => (
         <Form>
           <Header>
-            Режим редактирования данных пользователя:
+            User edit mode:
           </Header>
           <Box sx={{
             display: 'flex',
@@ -166,7 +166,7 @@ const ProfileEditor = ({ setIsEditMode }: OwnProps) => {
               })}
             </Grid>
             <Header sx={{ borderBottom: 'none' }}>
-              Контакты:
+              Contacts:
             </Header>
             <Grid container spacing={2}>
               {contacts.map(({ label, name }) => (
@@ -199,7 +199,7 @@ const ProfileEditor = ({ setIsEditMode }: OwnProps) => {
                   variant="contained"
                   fullWidth
                 >
-                  Обновить данные
+                  Update data
                 </Button>
               </Grid>
               <Grid item xl={3} lg={6} md={6} sm={12} xs={12}>
@@ -211,7 +211,7 @@ const ProfileEditor = ({ setIsEditMode }: OwnProps) => {
                   variant="outlined"
                   fullWidth
                 >
-                  Сбросить данные
+                  Reset data
                 </Button>
               </Grid>
             </Grid>

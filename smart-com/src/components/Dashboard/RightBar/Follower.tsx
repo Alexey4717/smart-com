@@ -46,7 +46,7 @@ const Follower = ({ id, name, photo }: OwnProps) => {
       }
     } catch (error) {
       enqueueSnackbar(
-        `Возникла ошибка при попытке установить диалог ${error ? error : ''}`,
+        `An error occurred while trying to open the dialog ${error ? error : ''}`,
         { variant: 'error' }
       );
     }
@@ -78,7 +78,7 @@ const Follower = ({ id, name, photo }: OwnProps) => {
             to={dialogsPath + id}
             onClick={startDialog}
           >
-            Написать
+            Open dialog
           </NavLink>
         </Items>
       </Wrapper>

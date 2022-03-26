@@ -20,12 +20,15 @@ export const usersAPI = {
             .then(res => res.data)
     },
     follow(userId: string | number) {
-        return instance.post<APIResponseType>(`follow/${userId}`).then(res => res.data)
+        return instance.post<APIResponseType>(`follow/${userId}`)
+            .then(res => res.data)
     },
     unfollow(userId: string | number) {
-        return instance.delete<APIResponseType>(`follow/${userId}`).then(res => res.data)
+        return instance.delete<APIResponseType>(`follow/${userId}`)
+            .then(res => res.data)
     },
     isFollow(userId: string | number) {
-        return instance.get<boolean>(`follow/${userId}`).then(res => res.data)
+        return instance.get<boolean>(`follow/${userId}`)
+            .then(res => res.data)
     }
 };

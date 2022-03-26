@@ -66,7 +66,7 @@ const Profile = () => {
           setIsFollowUser(response);
         } catch (error) {
           enqueueSnackbar(
-            `Возникла ошибка при определении подписки пользователя${error ? `: ${error}` : ''}.`,
+            `An error occurred while determining the user's subscription${error ? `: ${error}` : ''}.`,
             { variant: 'error' }
           );
         }
@@ -81,11 +81,11 @@ const Profile = () => {
         <Typography color="textSecondary">
           {
             isAuthUser
-              ? 'Вашего аккаунта'
+              ? 'Your account'
               : (
                 isFollowUser
-                  ? 'Вашего подписчика'
-                  : 'Чужого аккаунта'
+                  ? 'Your follower'
+                  : "Someone else's account"
               )
           }
         </Typography>
@@ -95,7 +95,7 @@ const Profile = () => {
 
   return (
     <View
-      pageTitle="Профиль"
+      pageTitle="Profile"
       pageSubTitle={subTitle}
       isLoading={isLoading}
     >
@@ -122,7 +122,7 @@ const Profile = () => {
                 color={palette.text.secondary}
               />}
             <Typography color="textSecondary">
-              {isEditMode ? 'Отменить редактирование' : 'Редактировать'}
+              {isEditMode ? 'Undo editing' : 'Edit'}
             </Typography>
           </Button>
         )
@@ -137,7 +137,7 @@ const Profile = () => {
       {(loadingStatus === ERROR) && (
         <Alert severity="error">
           <Typography>
-            Возникла ошибка при загрузке профиля
+            An error occurred while loading the profile
             {errors && `: ${errors}`}
           </Typography>
         </Alert>
